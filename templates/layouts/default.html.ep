@@ -13,7 +13,7 @@
 <!-- OpenGraph properties -->
         <meta property="og:title" content="<%= title %> | BC Election 2013 Map and Guide - The Tyee" />
         <meta property="og:description" content="<%= title %> | Candidate info, fast facts and related Tyee reporting. Updated as stories break. | BC Election 2013 Map and Guide - The Tyee" />
-        <meta property="og:image" content="<%= $asset %>/img/app-icon-144.png" />
+        <meta property="og:image" content="<%= $asset %>/ui/img/app-icon-144.png" />
         <meta property="og:site_name" content="BC Election 2013 Map and Guide - The Tyee" />
         <meta property="fb:admins" content="648146258, 512340590, 121503155, 13609677, 877285452, 584785109" />
 <!-- Dublin Core properties -->
@@ -30,21 +30,21 @@
         <%= include 'analytics' =%>
 % }
         <!-- Le styles -->
-        <link href="<%= $asset %>/css/styles.css" rel="stylesheet">
+        <link href="<%= $asset %>/ui/css/styles.css" rel="stylesheet">
         <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-        <link rel="shortcut icon" href="<%= $asset %>/img/favicon.ico">
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<%= $asset %>/img/apple-touch-icon-144-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%= $asset %>/img/apple-touch-icon-114-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%= $asset %>/img/apple-touch-icon-72-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" href="<%= $asset %>/img/apple-touch-icon-precomposed.png">
-        <link rel="stylesheet" href="<%= $asset %>/js/leaflet.css" />
+        <link rel="shortcut icon" href="<%= $asset %>/ui/img/favicon.ico">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<%= $asset %>/ui/img/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%= $asset %>/ui/img/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%= $asset %>/ui/img/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="<%= $asset %>/ui/img/apple-touch-icon-precomposed.png">
+        <link rel="stylesheet" href="<%= $asset %>/ui/js/leaflet.css" />
         <%= content_for 'header' %>
         <!--[if lte IE 8]>
-        <link rel="stylesheet" href="<%= $asset %>/js/leaflet.ie.css" />
-        <link rel="stylesheet" href="<%= $asset %>/js/L.Control.Locate.ie.css"/>
+        <link rel="stylesheet" href="<%= $asset %>/ui/js/leaflet.ie.css" />
+        <link rel="stylesheet" href="<%= $asset %>/ui/js/L.Control.Locate.ie.css"/>
         <![endif]-->
         <script type="text/javascript" src="//use.typekit.net/uky8tja.js"></script>
         <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
@@ -73,14 +73,14 @@
             </div>
             <div class="row-fluid" id="footer">
             <%= content_for 'footer_nav' %>
-            <p class="copyright">&copy; <a href="http://thetyee.ca/About/Intro/" title="B.C.'s Home for News, Culture and Solutions">The Tyee 2013</a> &bull; Managed hosting by <a href="http://www.gossamer-threads.com/" title="Gossamer Threads: Vancouver-based Web Technology Consultancy">Gossamer Threads</a> &bull; Election App hand-crafted by <a href="http://phillipadsmith.com" title="Digital publishing consultant, online advocacy specialist, and strategic convener">@phillipadsmith</a>. Open data provided by <a title="Represent | elected officials and electoral districts database" href="http://represent.opennorth.ca/">Represent</a>. <br />v<%= config->{'app_version'} %></p>
+            <p class="copyright">&copy; <a href="http://thetyee.ca/About/Intro/" title="B.C.'s Home for News, Culture and Solutions">The Tyee 2013</a> &bull; Managed hosting by <a href="http://www.gossamer-threads.com/" title="Gossamer Threads: Vancouver-based Web Technology Consultancy">Gossamer Threads</a> &bull; Election App hand-crafted by <a href="http://phillipadsmith.com" title="Digital publishing consultant, online advocacy specialist, and strategic convener">@phillipadsmith</a> &bull; Open data provided by <a title="Represent | elected officials and electoral districts database" href="http://represent.opennorth.ca/">Represent</a>. <br />v<%= config->{'app_version'} %></p>
             </div>
         </div> <!-- /container -->
         <!-- Le javascript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="<%= $asset %>/js/jquery-1.8.3.min.js"></script>
-        <script src="<%= $asset %>/js/leaflet.js"></script>
+        <script src="<%= $asset %>/ui/js/jquery-1.8.3.min.js"></script>
+        <script src="<%= $asset %>/ui/js/leaflet.js"></script>
         <%= content_for 'javascript' %>
 % if ( app->mode eq 'production' ) {
         <script type="text/javascript">

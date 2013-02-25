@@ -1,12 +1,7 @@
 {
-    "app_version"               : "v1.0.0",
+    "app_version"               : "1.0.1",
     "worksheet_name"            : "Sheet1",
     "worksheet_name_ridings"    : "Ridings",
     "avg_row_name"              : "Averages",
-    "static_asset_path"         : "http://static.apps.thetyee.ca/election/v1.0.0/ui",
-    "hypnotoad"       : {
-      "listen"        : [ "http://*:5000" ],
-      "workers"       : "10",
-      "proxy"         : "1"
-    }
+    "static_asset_path"         : "http://static.apps.thetyee.ca/election/v1.0.1"
 }

@@ -96,7 +96,7 @@ $(function() {
             % }
             % if ( $riding->{'tyeecall'} ) {
             <p id="tyeecall" class="alert alert-warning">
-            <i class="icon-exclamation-sign"></i>&nbsp;Tyee favourite to win: <%= $riding->{'tyeecall'} %>
+            <i class="icon-exclamation-sign"></i>&nbsp;Tyee projected to win: <%= $riding->{'tyeecall'} %>
             </p>
             % }
             <div id="race" class="row-fluid">
