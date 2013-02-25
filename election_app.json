@@ -3,5 +3,5 @@
     "worksheet_name"            : "Sheet1",
     "worksheet_name_ridings"    : "Ridings",
     "avg_row_name"              : "Averages",
-    "static_asset_path"         : "http://static.apps.thetyee.ca/election/v1.0.1"
+    "static_asset_path"         : "http://static.apps.thetyee.ca/election/v1.0.2"
 }
