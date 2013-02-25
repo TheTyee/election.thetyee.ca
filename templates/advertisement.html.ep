@@ -1,0 +1,12 @@
+            <div id="big-box" class="advertisement">
+                <p class="small">
+                --Advertisement--
+                </p>
+                <!-- ElectionGuideBigBox -->
+                <script type='text/javascript'>
+                GA_googleFillSlot("ElectionGuideBigBox");
+                </script>
+                <p class="small">
+                --Advertisement--
+                </p>
+            </div>

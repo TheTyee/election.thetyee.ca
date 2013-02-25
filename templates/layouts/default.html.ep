@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
+        <meta charset="utf-8">
+        <title>#bc2013 | <%= title %> | BC Election 2013 Map and Guide - The Tyee</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- General properties -->
+        <meta name="author" content="The Tyee">
+        <meta name="revisit-after" content="2 days" />
+        <meta name="copyright" content="The Tyee 2013" />
+        <meta name="MSSmartTagsPreventParsing" content="TRUE" />
+<!-- OpenGraph properties -->
+        <meta property="og:title" content="<%= title %> | BC Election 2013 Map and Guide - The Tyee" />
+        <meta property="og:description" content="<%= title %> | Candidate info, fast facts and related Tyee reporting. Updated as stories break. | BC Election 2013 Map and Guide - The Tyee" />
+        <meta property="og:image" content="<%= $asset %>/img/app-icon-144.png" />
+        <meta property="og:site_name" content="BC Election 2013 Map and Guide - The Tyee" />
+        <meta property="fb:admins" content="648146258, 512340590, 121503155, 13609677, 877285452, 584785109" />
+<!-- Dublin Core properties -->
+        <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
+        <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
+        <meta name="DC.title" lang="English" content="<%= title %> | BC Election 2013 Map and Guide - The Tyee" />
+        <meta name="DC.creator" content="The Tyee" />
+        <meta name="DC.subject" lang="English" content="BC Election 2013 Map and Guide" />
+        <meta name="DC.description" lang="English" content="<%= title %> | Candidate info, fast facts and related Tyee reporting. Updated as stories break. | BC Election 2013 Map and Guide - The Tyee" />
+        <meta name="DC.publisher" content="The Tyee" />
+        <meta name="DC.format" content="text/html" />
+% if ( app->mode eq 'production' ) {
+        <meta name="robots" content="index, follow" />
+        <%= include 'analytics' =%>
+% }
+        <!-- Le styles -->
+        <link href="<%= $asset %>/css/styles.css" rel="stylesheet">
+        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <link rel="shortcut icon" href="<%= $asset %>/img/favicon.ico">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<%= $asset %>/img/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%= $asset %>/img/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%= $asset %>/img/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="<%= $asset %>/img/apple-touch-icon-precomposed.png">
+        <link rel="stylesheet" href="<%= $asset %>/js/leaflet.css" />
+        <%= content_for 'header' %>
+        <!--[if lte IE 8]>
+        <link rel="stylesheet" href="<%= $asset %>/js/leaflet.ie.css" />
+        <link rel="stylesheet" href="<%= $asset %>/js/L.Control.Locate.ie.css"/>
+        <![endif]-->
+        <script type="text/javascript" src="//use.typekit.net/uky8tja.js"></script>
+        <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+        <script type='text/javascript' src='http://partner.googleadservices.com/gampad/google_service.js'>
+        </script>
+        <script type='text/javascript'>
+        GS_googleAddAdSenseService("ca-pub-2188005021510640");
+        GS_googleEnableAllServices();
+        </script>
+        <script type='text/javascript'>
+        GA_googleAddSlot("ca-pub-2188005021510640", "ElectionGuideBigBox");
+        </script>
+        <script type='text/javascript'>
+        GA_googleFetchAds();
+        </script> 
+    </head>
+
+    <body id="<%= $body_class %>">
+        <div class="container">
+            <%= content %>
+            <div id="riding-list" class="row-fluid">
+                <div class="span12">
+                <h3>Other B.C. ridings The Tyee is covering in the 2013 election</h3>                     
+                %= include 'riding_list'
+                </div>
+            </div>
+            <div class="row-fluid" id="footer">
+            <%= content_for 'footer_nav' %>
+            <p class="copyright">&copy; <a href="http://thetyee.ca/About/Intro/" title="B.C.'s Home for News, Culture and Solutions">The Tyee 2013</a> &bull; Managed hosting by <a href="http://www.gossamer-threads.com/" title="Gossamer Threads: Vancouver-based Web Technology Consultancy">Gossamer Threads</a> &bull; Election App hand-crafted by <a href="http://phillipadsmith.com" title="Digital publishing consultant, online advocacy specialist, and strategic convener">@phillipadsmith</a>. Open data provided by <a title="Represent | elected officials and electoral districts database" href="http://represent.opennorth.ca/">Represent</a>. <br />v<%= config->{'app_version'} %></p>
+            </div>
+        </div> <!-- /container -->
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="<%= $asset %>/js/jquery-1.8.3.min.js"></script>
+        <script src="<%= $asset %>/js/leaflet.js"></script>
+        <%= content_for 'javascript' %>
+% if ( app->mode eq 'production' ) {
+        <script type="text/javascript">
+          var _sf_async_config = { uid: 5276, domain: 'election.thetyee.ca' };
+          (function() {
+            function loadChartbeat() {
+              window._sf_endpt = (new Date()).getTime();
+              var e = document.createElement('script');
+              e.setAttribute('language', 'javascript');
+              e.setAttribute('type', 'text/javascript');
+              e.setAttribute('src',
+                (("https:" == document.location.protocol) ? "https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/" : "http://static.chartbeat.com/") +
+                "js/chartbeat.js");
+              document.body.appendChild(e);
+            };
+            var oldonload = window.onload;
+            window.onload = (typeof window.onload != 'function') ?
+              loadChartbeat : function() { oldonload(); loadChartbeat(); };
+          })();
+        </script>
+% }
+
+
+    </body>
+</html>

@@ -1,0 +1,67 @@
+% layout 'default',
+% body_class => 'front';
+% title 'Your riding-by-riding source for election issues and action';
+% content_for header => begin
+
+        <meta name="description" content="<%= title %> | Candidate info, fast facts and related Tyee reporting. Updated as stories break. | BC Election 2013 Map and Guide - The Tyee">
+        <meta name="keywords" content="<%= title %>, British Columbia, election, politics, news, issues">
+        <meta property="og:url" content="http://election.thetyee.ca/" />
+        <link rel="stylesheet" href="/ui/js/L.Control.Locate.css">
+% end
+% content_for javascript => begin
+        <script type="text/javascript" src="/ui/js/ridings-simple-min.js"></script>
+        <script src="/ui/js/L.Control.Locate.js"></script>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        <script src="/ui/js/front-page-min.js"></script>
+% end
+% content_for footer_nav => begin
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="http://thetyee.ca/Blogs/TheHook/" title="The Election Hook. Political News, Freshly Caught">Back to The Election Hook</a></li>
+                    <li><a href="http://thetyee.ca" title="B.C.'s Home for News, Culture and Solutions">Back to The Tyee</a></li>
+                </ul>
+% end
+
+            <div id="sharing" class="row-fluid">
+                <a class="btn_google" target="_blank" href="https://plus.google.com/share?hl=en&url=http://election.thetyee.ca" title="Share on Google Plus"><img src="/ui/img/google-24x24.png" /></a>
+                <a class="btn_facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?t=BC%20Election%20Map%20and%20Guide%20The%20Tyee&u=http://election.thetyee.ca" title="Share on Facebook"><img src="/ui/img/facebook-24x24.png" /></a>
+                <a class="btn_twitter" target="_blank" href="http://twitter.com/share?text=BC%20Election%20Map%20and%20Guide%20%40TheTyee&url=http://election.thetyee.ca" title="Share on Twitter"><img src="/ui/img/twitter-24x24.png" /></a>
+            </div>
+            <header>
+            <a href="http://thetyee.ca" title="The Tyee: B.C.'s Home for News, Culture and Solutions"><h1>The Tyee</h1></a>
+            </header>
+            <div id="section-title">
+                <h2>BC Election Map and Guide</h2> 
+            </div>
+            <div id="map" class="hidden-phone">
+            </div>
+            <div id="content" class="row-fluid">
+                <div id="content-main" class="span8">
+                    <div class="well visible-phone riding-search-mobile">
+                        <form id="riding-search-mobile" class="riding-search">
+                            <span>Search for your riding by address:</span><br />
+                            <input type="text" size="25" placeholder="Your address: Street, City." autofocus />&nbsp;
+                            <input type="submit" value="Go" /><br />
+                            <span id="geolocate-span" style="display:none">We can also try to <a href="#" id="geolocate-link">automatically find</a> your location.</span> Or you can select from a <a href="#riding-list">list of ridings</a>.
+                        
+                        </form>
+                        <div id="riding-message-mobile" class="riding-message"></div>
+                    </div>
+                    <div id="election-hook">
+                        <a href="http://thetyee.ca/Blogs/TheHook/"><img src="/ui/img/the-election-hook-logo.png" width="546" height="76" /></a>
+                        <ul class="section">
+                        % for my $p ( @$hook_posts[0..9] ) {
+                        % $p = $p->{'_source'};
+                        <li>
+                        <a href="<%= $p->{'uri'} %>" title="Read <%= $p->{'title'} %>"><%= $p->{'title'} %></a>
+                        </li>
+                        % }
+                        </ul>
+                        <p>That's the latest Tyee election reporting &mdash; but hardly all of it. <a href="http://thetyee.ca/Blogs/TheHook/">More Election Hook here.</a></p>
+                     </div>
+                   <hr class="soften" />
+                </div><!-- /.span8 -->
+                <div id="content-sidebar" class="span4">
+                %= include 'advertisement'
+                %= include 'sidebar'
+                </div><!-- / .span4 -->
+            </div> <!-- /.row-fluid -->
