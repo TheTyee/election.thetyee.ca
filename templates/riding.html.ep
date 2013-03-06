@@ -1,6 +1,6 @@
 % layout 'default',
 % body_class => 'riding',
-% title => $riding->{'riding'} . ' Riding: Conservative, Green, Liberal, NDP & Independent Candidates';
+% title => $riding->{'riding'} . ' Riding: Conservative, Green, Liberal, NDP & Independent Candidates. | BC Election 2013 Map and Guide';
 % use Text::Markdown 'markdown';
 % content_for header => begin
 
@@ -77,7 +77,7 @@ $(function() {
     <div id="map"></div>
     </header>
             <div id="section-title">
-                <h2>BC Election Map and Guide</h2> 
+                <h2>BC Election 2013 Map and Guide</h2> 
             </div>
     <div id="breadcrumb" class="row-fluid">
         <div class="span12">

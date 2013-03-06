@@ -3,7 +3,7 @@
     <head>
         <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
         <meta charset="utf-8">
-        <title>#bc2013 | <%= title %> | BC Election 2013 Map and Guide - The Tyee</title>
+        <title><%= title %> - The Tyee</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- General properties -->
         <meta name="author" content="The Tyee">
