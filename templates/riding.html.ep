@@ -73,15 +73,15 @@ $(function() {
                 </ul>
 % end
     <div id="sharing" class="row-fluid">
-        <a class="btn_google" target="_blank" href="https://plus.google.com/share?hl=en&url=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Google Plus"><img src="/ui/img/google-24x24.png" /></a>
-        <a class="btn_facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?t=BC%20Election%20Map%20and%20Guide%20The%20Tyee&u=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Facebook"><img src="/ui/img/facebook-24x24.png" /></a>
-        <a class="btn_twitter" target="_blank" href="http://twitter.com/share?text=BC%20Election%20Map%20and%20Guide%20%40TheTyee&url=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Twitter"><img src="/ui/img/twitter-24x24.png" /></a>
+        <a class="btn_google" target="_blank" href="https://plus.google.com/share?hl=en&url=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Google Plus"><img src="<%= $asset %>/ui/img/google-24x24.png" /></a>
+        <a class="btn_facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?t=BC%20Election%20Map%20and%20Guide%20The%20Tyee&u=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Facebook"><img src="<%= $asset %>/ui/img/facebook-24x24.png" /></a>
+        <a class="btn_twitter" target="_blank" href="http://twitter.com/share?text=BC%20Election%20Map%20and%20Guide%20%40TheTyee&url=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Twitter"><img src="<%= $asset %>/ui/img/twitter-24x24.png" /></a>
     </div>
     <header>
     <div id="map"></div>
     </header>
             <div id="section-title">
-                <h2>BC Election 2013 Map and Guide</h2> 
+                <h2>BC Election 2013 Map & Guide</h2> 
             </div>
     <div id="breadcrumb" class="row-fluid">
         <div class="span12">
