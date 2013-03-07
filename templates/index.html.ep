@@ -30,7 +30,7 @@
             <a href="http://thetyee.ca" title="The Tyee: B.C.'s Home for News, Culture and Solutions"><h1>The Tyee</h1></a>
             </header>
             <div id="section-title">
-                <h2>BC Election 2013 Map and Guide</h2> 
+                <h2>BC Election 2013 Map & Guide</h2> 
             </div>
             <div id="map" class="hidden-phone">
             </div>
@@ -49,7 +49,7 @@
                     <div id="election-hook">
                         <a href="http://thetyee.ca/Blogs/TheHook/"><img src="/ui/img/the-election-hook-logo.png" width="546" height="76" /></a>
                         <ul class="section">
-                        % for my $p ( @$hook_posts[0..9] ) {
+                        % for my $p ( @$hook_posts[0..14] ) {
                         % $p = $p->{'_source'};
                         <li>
                         <a href="<%= $p->{'uri'} %>" title="Read <%= $p->{'title'} %>"><%= $p->{'title'} %></a>

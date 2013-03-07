@@ -48,13 +48,16 @@ $(function() {
         $.getJSON(url, function (data) {
             // Yeah, I know -- yuk! -- API response need improvement.
             var story = data.hits.hits[0]._source;
+            var date  = moment( story.storyDate ).fromNow();
             var li = $('#story-'+index)
                 .append($('<h4>'))
                 .append($('<a>')
                 .attr('href', story.uri)
                 .attr('title', story.title).text(story.title))
                 .append($('<p>')
-                .text(story.teaser))
+                .text( story.teaser ))
+                .append($('<p class="date">')
+                .text( 'Published ' + date ))
                 .show();
         })
     });
@@ -63,7 +66,7 @@ $(function() {
 % end
 % content_for footer_nav => begin
                 <ul class="nav nav-pills nav-stacked">
-                    <li><a href="/" title="The Tyee's B.C. Election 2013 Riding Map and Guide">Back to the BC Election Map and Guide</a></li>
+                    <li><a href="/" title="The Tyee's B.C. Election 2013 Riding Map & Guide">Back to the BC Election Map and Guide</a></li>
                     <li><a href="http://thetyee.ca/Blogs/TheHook/" title="The Election Hook. Political News, Freshly Caught">Back to The Election Hook</a></li>
                     <li><a href="http://thetyee.ca" title="B.C.'s Home for News, Culture and Solutions">Back to The Tyee</a></li>
                 </ul>
