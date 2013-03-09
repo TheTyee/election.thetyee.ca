@@ -1,6 +1,6 @@
 % layout 'default',
 % body_class => 'front';
-% title 'Your riding-by-riding source for election issues and action';
+% title 'BC Election 2013 Map and Guide | Your riding-by-riding source for election issues and action';
 % content_for header => begin
 
         <meta name="description" content="<%= title %> | Candidate info, fast facts and related Tyee reporting. Updated as stories break. | BC Election 2013 Map and Guide - The Tyee">
@@ -20,17 +20,19 @@
                     <li><a href="http://thetyee.ca" title="B.C.'s Home for News, Culture and Solutions">Back to The Tyee</a></li>
                 </ul>
 % end
-
+% content_for sharing => begin
+                <a class="btn_google" target="_blank" href="https://plus.google.com/share?hl=en&url=http://election.thetyee.ca" title="Share on Google Plus"><img src="<%= $asset %>/ui/img/google-24x24.png" /></a>
+                <a class="btn_facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?t=BC%20Election%20Map%20and%20Guide%20The%20Tyee&u=http://election.thetyee.ca" title="Share on Facebook"><img src="<%= $asset %>/ui/img/facebook-24x24.png" /></a>
+                <a class="btn_twitter" target="_blank" href="http://twitter.com/share?text=BC%20Election%20Map%20and%20Guide%20%40TheTyee&url=http://election.thetyee.ca" title="Share on Twitter"><img src="<%= $asset %>/ui/img/twitter-24x24.png" /></a>
+% end
             <div id="sharing" class="row-fluid">
-                <a class="btn_google" target="_blank" href="https://plus.google.com/share?hl=en&url=http://election.thetyee.ca" title="Share on Google Plus"><img src="/ui/img/google-24x24.png" /></a>
-                <a class="btn_facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?t=BC%20Election%20Map%20and%20Guide%20The%20Tyee&u=http://election.thetyee.ca" title="Share on Facebook"><img src="/ui/img/facebook-24x24.png" /></a>
-                <a class="btn_twitter" target="_blank" href="http://twitter.com/share?text=BC%20Election%20Map%20and%20Guide%20%40TheTyee&url=http://election.thetyee.ca" title="Share on Twitter"><img src="/ui/img/twitter-24x24.png" /></a>
+                <%= content_for 'sharing' %>
             </div>
             <header>
             <a href="http://thetyee.ca" title="The Tyee: B.C.'s Home for News, Culture and Solutions"><h1>The Tyee</h1></a>
             </header>
             <div id="section-title">
-                <h2>BC Election Map and Guide</h2> 
+                <h2>BC Election 2013 Map & Guide</h2> 
             </div>
             <div id="map" class="hidden-phone">
             </div>
@@ -47,9 +49,9 @@
                         <div id="riding-message-mobile" class="riding-message"></div>
                     </div>
                     <div id="election-hook">
-                        <a href="http://thetyee.ca/Blogs/TheHook/"><img src="/ui/img/the-election-hook-logo.png" width="546" height="76" /></a>
+                        <a href="http://thetyee.ca/Blogs/TheHook/"><img src="<%= $asset %>/ui/img/the-election-hook-logo.png" width="546" height="76" /></a>
                         <ul class="section">
-                        % for my $p ( @$hook_posts[0..9] ) {
+                        % for my $p ( @$hook_posts[0..14] ) {
                         % $p = $p->{'_source'};
                         <li>
                         <a href="<%= $p->{'uri'} %>" title="Read <%= $p->{'title'} %>"><%= $p->{'title'} %></a>
