@@ -12,7 +12,7 @@ my $cache = CHI->new( driver => 'Memory', global => 1 );
 # UserAgent
 my $ua = Mojo::UserAgent->new;
 
-# Constants
+# TODO change to ReadOnly
 use constant REPRESENT_API => 'http://represent.opennorth.ca';
 use constant TYEE_API      => 'http://api.thetyee.ca/v1/';
 
@@ -28,8 +28,12 @@ get '/' => sub {
 
     # TODO move this to JS in front-page.js, no point here.
     # Get the latest The Hook items from the Tyee's API
-    my $hook_json  = $ua->get( TYEE_API . '/latest/blogs/' )->res->json;
-    my $hook_posts = $hook_json->{'hits'}{'hits'};
+    my $hook_posts = $cache->get( 'hook_posts' );
+    if ( !defined $hook_posts ) {
+        my $hook_json  = $ua->get( TYEE_API . '/latest/blogs/' )->res->json;
+        $hook_posts = $hook_json->{'hits'}{'hits'};
+        $cache->set( 'hook_posts', $hook_posts, "5 minutes" );
+    }
 
     # Stash the data that we'll use in the index template
     $self->stash(
@@ -63,7 +67,7 @@ get '/riding/:name' => sub {
         $cache->set( $name, $riding, "5 minutes" );
         $cache_status = 'fetched';
     }
-    $self->app->log->debug("Cache status was: $cache_status");
+    $self->app->log->debug( "Cache status was: $cache_status" );
 
     # Find the corresponding row in the spreadsheet for the BC averages
     # (get it from the cache, if possible)
@@ -71,7 +75,7 @@ get '/riding/:name' => sub {
     my $avg          = $cache->get( $avg_row_name );
     if ( !defined $avg ) {
         $avg = _get_avg_from_gs( $avg_row_name );
-        $cache->set( $avg_row_name, $avg, "60 minutes" );
+        $cache->set( $avg_row_name, $avg, "240 minutes" );
     }
 
     # TODO move to sub
@@ -81,10 +85,13 @@ get '/riding/:name' => sub {
         if $incumbent;    # Remove any trailing whitespace in spreadsheet
 
     # TODO move to JS in ridings.html.ep, just slowing things down
-    # ... or cache it like the GS data and leave it here ('cause it's done)
     # Get the incumbent photo and so on from Represent
-    my $rep_query = '/representatives/?name=' . $incumbent;
-    my $rep_data  = $ua->get( REPRESENT_API . $rep_query )->res->json;
+    my $rep_data = $cache->get( $incumbent );
+    if ( !defined $rep_data ) {
+        my $rep_query = '/representatives/?name=' . $incumbent;
+        $rep_data  = $ua->get( REPRESENT_API . $rep_query )->res->json;
+        $cache->set( $incumbent, $rep_data, "240 minutes" );
+    }
 
     # Get rid of 'BC ' at the start of party names
     my $party = $riding->{'incumbentparty'};
@@ -98,12 +105,15 @@ get '/riding/:name' => sub {
 
     # TODO move to sub
     my $candidates = {};    # Let's pass the registered candidates in one go
-    for my $p ( qw/ bcliberals bcndp bcgreens bcconservatives other / ) {
+    my @candidate_names;    # A list for page titles
+    for my $p ( qw/ bcconservatives bcgreens bcliberals bcndp other / ) {
 
       # Format Twitter handles consistently, regardless of how they're entered
         my $tw_username = $riding->{ $p . 'twitter' };
         $tw_username =~ s/@//gi if $tw_username;
-
+        if ( $riding->{$p} ) {    # If there's a candidate
+            push @candidate_names, $riding->{$p};
+        }
         $candidates->{$p} = {
             name    => $riding->{$p},
             url     => $riding->{ $p . 'url' },
@@ -112,14 +122,27 @@ get '/riding/:name' => sub {
         };
     }
 
+    my $can_names;
+    my $candidate_last = pop @candidate_names;
+    if ( @candidate_names == 1 ) {
+        $can_names = $candidate_names[0] . ' and ' . $candidate_last;
+    } elsif ( @candidate_names > 1 ) {
+        $can_names = join( ', ', @candidate_names );
+        $can_names .= ', and ' . $candidate_last;
+    } else {
+        $can_names = $candidate_last;
+    }
+
     # Stash the data from the spreadsheet for use in the template
     $self->stash(
         riding         => $riding,
         incumbent_name => $incumbent,
         rep_data       => $rep_data->{'objects'}[0],
+
         #rep_query       => REPRESENT_API . $rep_query,
         incumbent_party => $party,
         candidate_data  => $candidates,
+        candidate_names => $can_names,
         bc_averages     => $avg,
         related_stories => _get_tyee_story_urls( $riding->{'tyee-stories'} ),
         cache_status    => $cache_status,

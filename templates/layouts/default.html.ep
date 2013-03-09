@@ -11,18 +11,18 @@
         <meta name="copyright" content="The Tyee 2013" />
         <meta name="MSSmartTagsPreventParsing" content="TRUE" />
 <!-- OpenGraph properties -->
-        <meta property="og:title" content="<%= title %> | BC Election 2013 Map and Guide - The Tyee" />
-        <meta property="og:description" content="<%= title %> | Candidate info, fast facts and related Tyee reporting. Updated as stories break. | BC Election 2013 Map and Guide - The Tyee" />
-        <meta property="og:image" content="<%= $asset %>/ui/img/app-icon-144.png" />
+        <meta property="og:title" content="<%= title %> - The Tyee" />
+        <meta property="og:description" content="Candidate info, fast facts and related Tyee reporting. Updated as stories break." />
+        <meta property="og:image" content="<%= $asset %>/ui/img/bc_election_2013_map_and_guide_250x300.png" />
         <meta property="og:site_name" content="BC Election 2013 Map and Guide - The Tyee" />
-        <meta property="fb:admins" content="648146258, 512340590, 121503155, 13609677, 877285452, 584785109" />
+        <meta property="fb:admins" content="648146258,512340590,121503155,13609677,877285452,584785109" />
 <!-- Dublin Core properties -->
         <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
         <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
-        <meta name="DC.title" lang="English" content="<%= title %> | BC Election 2013 Map and Guide - The Tyee" />
+        <meta name="DC.title" lang="English" content="<%= title %> - The Tyee" />
         <meta name="DC.creator" content="The Tyee" />
         <meta name="DC.subject" lang="English" content="BC Election 2013 Map and Guide" />
-        <meta name="DC.description" lang="English" content="<%= title %> | Candidate info, fast facts and related Tyee reporting. Updated as stories break. | BC Election 2013 Map and Guide - The Tyee" />
+        <meta name="DC.description" lang="English" content="Candidate info, fast facts and related Tyee reporting. Updated as stories break." />
         <meta name="DC.publisher" content="The Tyee" />
         <meta name="DC.format" content="text/html" />
 % if ( app->mode eq 'production' ) {
@@ -103,7 +103,5 @@
           })();
         </script>
 % }
-
-
     </body>
 </html>

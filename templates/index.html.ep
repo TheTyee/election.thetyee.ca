@@ -20,11 +20,13 @@
                     <li><a href="http://thetyee.ca" title="B.C.'s Home for News, Culture and Solutions">Back to The Tyee</a></li>
                 </ul>
 % end
-
-            <div id="sharing" class="row-fluid">
+% content_for sharing => begin
                 <a class="btn_google" target="_blank" href="https://plus.google.com/share?hl=en&url=http://election.thetyee.ca" title="Share on Google Plus"><img src="<%= $asset %>/ui/img/google-24x24.png" /></a>
                 <a class="btn_facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?t=BC%20Election%20Map%20and%20Guide%20The%20Tyee&u=http://election.thetyee.ca" title="Share on Facebook"><img src="<%= $asset %>/ui/img/facebook-24x24.png" /></a>
                 <a class="btn_twitter" target="_blank" href="http://twitter.com/share?text=BC%20Election%20Map%20and%20Guide%20%40TheTyee&url=http://election.thetyee.ca" title="Share on Twitter"><img src="<%= $asset %>/ui/img/twitter-24x24.png" /></a>
+% end
+            <div id="sharing" class="row-fluid">
+                <%= content_for 'sharing' %>
             </div>
             <header>
             <a href="http://thetyee.ca" title="The Tyee: B.C.'s Home for News, Culture and Solutions"><h1>The Tyee</h1></a>

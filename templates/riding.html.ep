@@ -1,6 +1,6 @@
 % layout 'default',
 % body_class => 'riding',
-% title => $riding->{'riding'} . ' Riding: Conservative, Green, Liberal, NDP & Independent Candidates. | BC Election 2013 Map and Guide';
+% title => $riding->{'riding'} . ' Riding: Conservative, Green, Liberal, NDP & Independent Candidates. ' . $candidate_names . ' | BC Election 2013 Map and Guide';
 % use Text::Markdown 'markdown';
 % use Number::Format qw(:subs);
 % content_for header => begin
@@ -72,10 +72,14 @@ $(function() {
                     <li><a href="http://thetyee.ca" title="B.C.'s Home for News, Culture and Solutions">Back to The Tyee</a></li>
                 </ul>
 % end
-    <div id="sharing" class="row-fluid">
+% content_for sharing => begin
         <a class="btn_google" target="_blank" href="https://plus.google.com/share?hl=en&url=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Google Plus"><img src="<%= $asset %>/ui/img/google-24x24.png" /></a>
-        <a class="btn_facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?t=BC%20Election%20Map%20and%20Guide%20The%20Tyee&u=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Facebook"><img src="<%= $asset %>/ui/img/facebook-24x24.png" /></a>
-        <a class="btn_twitter" target="_blank" href="http://twitter.com/share?text=BC%20Election%20Map%20and%20Guide%20%40TheTyee&url=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Twitter"><img src="<%= $asset %>/ui/img/twitter-24x24.png" /></a>
+        <a class="btn_facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?t=BC%20Election%202013%20Map%20and%20Guide%20The%20Tyee&u=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Facebook"><img src="<%= $asset %>/ui/img/facebook-24x24.png" /></a>
+        <a class="btn_twitter" target="_blank" href="http://twitter.com/share?text=<%= $riding->{'riding'} %>%20BC%20Election%202013%20Map%20and%20Guide%20%40TheTyee&url=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Twitter"><img src="<%= $asset %>/ui/img/twitter-24x24.png" /></a>
+
+% end
+    <div id="sharing" class="row-fluid">
+    <%= content_for 'sharing' %>
     </div>
     <header>
     <div id="map"></div>
@@ -138,6 +142,7 @@ $(function() {
                 </div>
             </div><!-- / #race -->
             <div id="riding-summary" class="well">
+            <%= content_for 'sharing' %>
                 <h3>At a glance</h3>
                 <%== markdown( $riding->{'ataglance'} ) %>
                 <%== markdown( $riding->{'riding-change-analysis'} ) %>
@@ -258,6 +263,7 @@ $(function() {
                     </tbody>
                 </table>
             </div>
+            <%= content_for 'sharing' %>
         </div><!-- /.span8 -->
         <div id="content-sidebar" class="span4">
             %= include 'advertisement'
