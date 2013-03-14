@@ -62,7 +62,7 @@ get '/riding/:name' => sub {
 
         # 404
         return $self->render_not_found
-            unless $riding;
+        unless $riding;
 
         $cache->set( $name, $riding, "5 minutes" );
         $cache_status = 'fetched';
@@ -82,7 +82,7 @@ get '/riding/:name' => sub {
     # Handle data issues with the incumbent column
     my $incumbent = $riding->{'incumbent'};
     $incumbent =~ s/\s*$//g
-        if $incumbent;    # Remove any trailing whitespace in spreadsheet
+    if $incumbent;    # Remove any trailing whitespace in spreadsheet
 
     # TODO move to JS in ridings.html.ep, just slowing things down
     # Get the incumbent photo and so on from Represent
@@ -136,7 +136,7 @@ get '/riding/:name' => sub {
     my @candidate_names;    # A list for page titles
     for my $p ( qw/ bcconservative bcgreen bcliberal bcndp other / ) {
 
-      # Format Twitter handles consistently, regardless of how they're entered
+        # Format Twitter handles consistently, regardless of how they're entered
         my $tw_username = $riding->{ $p . 'twitter' };
         $tw_username =~ s/@//gi if $tw_username;
         if ( $riding->{$p} ) {    # If there's a candidate
@@ -202,7 +202,7 @@ sub _get_riding_from_gs {
 
     # Find the spreadsheet by key
     my $spreadsheet
-        = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
+    = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
 
     # Find the main worksheet by title
     my $worksheet = $spreadsheet->worksheet(
@@ -220,7 +220,7 @@ sub _get_avg_from_gs {
 
     # Find the spreadsheet by key
     my $spreadsheet
-        = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
+    = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
 
     # Find the main worksheet by title
     my $worksheet = $spreadsheet->worksheet(
