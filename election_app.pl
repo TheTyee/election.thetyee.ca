@@ -95,18 +95,46 @@ get '/riding/:name' => sub {
 
     # Get rid of 'BC ' at the start of party names
     my $party = $riding->{'incumbentparty'};
-    $party =~ s/BC //gi if $party;
+    # TODO this should probably get migrated to a Class
     my $parties = {
-        bcliberals      => 'Liberal',
-        bcndp           => 'NDP',
-        bcgreens        => 'Green',
-        bcconservatives => 'Conservative',
+        bcliberal      => { 
+            name        => 'BC Liberal',
+            url         => 'http://www.bcliberals.com/',
+            css         => 'liberal',
+            facebook    => '',
+            twitter     => '',
+            hashtag     => '',
+        },
+        bcndp           => {
+            name  => 'BC NDP',
+            url   => 'http://www.bcndp.ca/',
+            css         => 'ndp',
+            facebook    => '',
+            twitter     => '',
+            hashtag     => '',
+        },
+        bcgreen        => { 
+            name  => 'BC Green',
+            url   => 'http://www.greenparty.bc.ca/',
+            css   => 'green',
+            facebook    => '',
+            twitter     => '',
+            hashtag     => '',
+        },
+        bcconservative => { 
+            name  => 'BC Conservative',
+            url   => 'http://www.bcconservative.ca/',
+            css   => 'conservative',
+            facebook    => '',
+            twitter     => '',
+            hashtag     => '',
+        }
     };
 
     # TODO move to sub
     my $candidates = {};    # Let's pass the registered candidates in one go
     my @candidate_names;    # A list for page titles
-    for my $p ( qw/ bcconservatives bcgreens bcliberals bcndp other / ) {
+    for my $p ( qw/ bcconservative bcgreen bcliberal bcndp other / ) {
 
       # Format Twitter handles consistently, regardless of how they're entered
         my $tw_username = $riding->{ $p . 'twitter' };
@@ -115,10 +143,10 @@ get '/riding/:name' => sub {
             push @candidate_names, $riding->{$p};
         }
         $candidates->{$p} = {
-            name    => $riding->{$p},
-            url     => $riding->{ $p . 'url' },
-            twitter => $tw_username,
-            party   => $riding->{ $p . 'party' } || $parties->{$p},
+            name        => $riding->{$p},
+            url         => $riding->{ $p . 'url' },
+            twitter     => $tw_username,
+            party       => $riding->{ $p . 'party' } || $parties->{ $p }{'name'},
         };
     }
 
@@ -147,6 +175,7 @@ get '/riding/:name' => sub {
         related_stories => _get_tyee_story_urls( $riding->{'tyee-stories'} ),
         cache_status    => $cache_status,
         asset           => $config->{'static_asset_path'},
+        parties           => $parties,
     );
 
     # Render the riding.html.ep template
