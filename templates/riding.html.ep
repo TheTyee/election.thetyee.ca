@@ -82,7 +82,9 @@ $(function() {
     <%= content_for 'sharing' %>
     </div>
     <header>
-    <div id="map"></div>
+        <a title="Back to The Tyee's front page" href="http://thetyee.ca">
+            <div id="map"></div>
+        </a>
     </header>
             <div id="section-title">
                 <h2>BC Election 2013 Map & Guide</h2> 
