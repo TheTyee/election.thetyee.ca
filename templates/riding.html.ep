@@ -1,6 +1,6 @@
 % layout 'default',
 % body_class => 'riding',
-% title => $riding->{'riding'} . ' Riding: Conservative, Green, Liberal, NDP & Independent Candidates. ' . $candidate_names . ' | BC Election 2013 Map and Guide';
+% title => $riding->{'riding'} . ' Riding: BC Conservative, BC Green, BC Liberal, BC NDP & Independent Candidates. ' . $candidate_names . ' | BC Election 2013 Map and Guide';
 % use Text::Markdown 'markdown';
 % use Number::Format qw(:subs);
 
