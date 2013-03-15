@@ -1,208 +1,227 @@
 % layout 'default',
 % body_class => 'riding',
-% title => $riding->{'riding'} . ' Riding: Conservative, Green, Liberal, NDP & Independent Candidates. ' . $candidate_names . ' | BC Election 2013 Map and Guide';
+% title => $riding->{'riding'} . ' Riding: BC Conservative, BC Green, BC Liberal, BC NDP & Independent Candidates. ' . $candidate_names . ' | BC Election 2013 Map and Guide';
 % use Text::Markdown 'markdown';
 % use Number::Format qw(:subs);
-% content_for header => begin
 
-        <meta name="chi-cache" value="<%= $cache_status %>" />
-        <meta name="description" content="<%= title %> | BC Election 2013 Map and Guide - The Tyee">
-        <meta name="keywords" content="<%= $riding->{'riding'} %>, BC Election 2013 Map and Guide, British Columbia, Green Party of BC, Liberal Party of BC, BC NDP, Conservative Party of BC">
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content="http://election.thetyee.ca/riding/<%= $name %>" />
+% content_for header => begin
+<meta name="chi-cache" value="<%= $cache_status %>" />
+<meta name="description" content="<%= title %> | BC Election 2013 Map and Guide - The Tyee">
+<meta name="keywords" content="<%= $riding->{'riding'} %>, BC Election 2013 Map and Guide, British Columbia, Green Party of BC, Liberal Party of BC, BC NDP, Conservative Party of BC">
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://election.thetyee.ca/riding/<%= $name %>" />
 % end
+
 % content_for javascript => begin
 <script>
-$(function() {
-    // Leaflet map for top of page
-    var map = L.map('map', { zoomControl: false });
-    L.tileLayer('http://{s}.tile.cloudmade.com/8df2e4e99eb94de2a136db10bf4e9afa/997/256/{z}/{x}/{y}.png', {
-    }).addTo(map);
-    
-    // Center on riding centroid
-    $.getJSON("http://represent.opennorth.ca/boundaries/british-columbia-electoral-districts/<%= $name %>/centroid?callback=?", function(data) {
-        var coordinates = data.coordinates;
-        var lat = coordinates[1];
-        var lng = coordinates[0];
-        var center = [ lat, lng ];
-        map.setView( center , 8);
-    });
+    $(function() {
+        // Leaflet map for top of page
+        var map = L.map('map', { zoomControl: false });
+        L.tileLayer('http://{s}.tile.cloudmade.com/8df2e4e99eb94de2a136db10bf4e9afa/997/256/{z}/{x}/{y}.png', {
+        }).addTo(map);
 
-    // Get paths for Riding Related Tyee Reporting
-    var paths = [];
-    % for my $path ( @$related_stories ) {
-    paths.push("<%= $path %>");
-    % }
+        // Center on riding centroid
+        $.getJSON("http://represent.opennorth.ca/boundaries/british-columbia-electoral-districts/<%= $name %>/centroid?callback=?", function(data) {
+            var coordinates = data.coordinates;
+            var lat = coordinates[1];
+            var lng = coordinates[0];
+            var center = [ lat, lng ];
+            map.setView( center , 8);
+        });
 
-    // Some problems with this, not the least of which is the latency
-    // TODO only load first five, then offer option to load more
-   // Set up the HTML first (assumes the <ul> is empty)
-    $.each(paths, function (index, value) {
-        var li = $('<li>')
-            .attr('id', 'story-'+index)
-            .hide();
-        $('#recent-stories ul').append(li);
-    });
-    // For each related story path, lookup the story via The Tyee API
-    $.each(paths, function (index, value) {
-        var url = 'http://api.thetyee.ca/v1/search/path' + value + '?callback=?';
-        $.getJSON(url, function (data) {
-            // Yeah, I know -- yuk! -- API response need improvement.
-            var story = data.hits.hits[0]._source;
-            var date  = moment( story.storyDate ).fromNow();
-            var li = $('#story-'+index)
-                .append($('<h4>'))
-                .append($('<a>')
-                .attr('href', story.uri)
-                .attr('title', story.title).text(story.title))
-                .append($('<p>')
-                .text( story.teaser ))
-                .append($('<p class="date">')
-                .text( 'Published ' + date ))
-                .show();
-        })
-    });
- });
-</script>
+        // Get paths for Riding Related Tyee Reporting
+        var paths = [];
+        % for my $path ( @$related_stories ) {
+        paths.push("<%= $path %>");
+        % }
+
+        // Some problems with this, not the least of which is the latency
+        // TODO only load first five, then offer option to load more
+        // Set up the HTML first (assumes the <ul> is empty)
+            $.each(paths, function (index, value) {
+                var li = $('<li>')
+                .attr('id', 'story-'+index)
+                .hide();
+                $('#recent-stories ul').append(li);
+            });
+            // For each related story path, lookup the story via The Tyee API
+            $.each(paths, function (index, value) {
+                var url = 'http://api.thetyee.ca/v1/search/path' + value + '?callback=?';
+                $.getJSON(url, function (data) {
+                    // Yeah, I know -- yuk! -- API response need improvement.
+                    var story = data.hits.hits[0]._source;
+                    var date  = moment( story.storyDate ).fromNow();
+                    var li = $('#story-'+index)
+                    .append($('<h4>'))
+                        .append($('<a>')
+                            .attr('href', story.uri)
+                            .attr('title', story.title).text(story.title))
+                            .append($('<p>')
+                            .text( story.teaser ))
+                            .append($('<p class="date">')
+                            .text( 'Published ' + date ))
+                            .show();
+                        })
+                    });
+                });
+            </script>
 % end
+
 % content_for footer_nav => begin
-                <ul class="nav nav-pills nav-stacked">
-                    <li><a href="/" title="The Tyee's B.C. Election 2013 Riding Map & Guide">Back to the BC Election Map and Guide</a></li>
-                    <li><a href="http://thetyee.ca/Blogs/TheHook/" title="The Election Hook. Political News, Freshly Caught">Back to The Election Hook</a></li>
-                    <li><a href="http://thetyee.ca" title="B.C.'s Home for News, Culture and Solutions">Back to The Tyee</a></li>
-                </ul>
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="/" title="The Tyee's B.C. Election 2013 Riding Map & Guide">Back to the BC Election Map and Guide</a></li>
+                <li><a href="http://thetyee.ca/Blogs/TheHook/" title="The Election Hook. Political News, Freshly Caught">Back to The Election Hook</a></li>
+                <li><a href="http://thetyee.ca" title="B.C.'s Home for News, Culture and Solutions">Back to The Tyee</a></li>
+            </ul>
 % end
-% content_for sharing => begin
-        <a class="btn_google" target="_blank" href="https://plus.google.com/share?hl=en&url=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Google Plus"><img src="<%= $asset %>/ui/img/google-24x24.png" /></a>
-        <a class="btn_facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?t=BC%20Election%202013%20Map%20and%20Guide%20The%20Tyee&u=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Facebook"><img src="<%= $asset %>/ui/img/facebook-24x24.png" /></a>
-        <a class="btn_twitter" target="_blank" href="http://twitter.com/share?text=<%= $riding->{'riding'} %>%20BC%20Election%202013%20Map%20and%20Guide%20%40TheTyee&url=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Twitter"><img src="<%= $asset %>/ui/img/twitter-24x24.png" /></a>
 
+% content_for sharing => begin
+            <a class="btn_google" target="_blank" href="https://plus.google.com/share?hl=en&url=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Google Plus"><img src="<%= $asset %>/ui/img/google-24x24.png" /></a>
+            <a class="btn_facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?t=BC%20Election%202013%20Map%20and%20Guide%20The%20Tyee&u=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Facebook"><img src="<%= $asset %>/ui/img/facebook-24x24.png" /></a>
+            <a class="btn_twitter" target="_blank" href="http://twitter.com/share?text=<%= $riding->{'riding'} %>%20BC%20Election%202013%20Map%20and%20Guide%20%40TheTyee&url=http://election.thetyee.ca/riding/<%= $name %>" title="Share on Twitter"><img src="<%= $asset %>/ui/img/twitter-24x24.png" /></a>
 % end
-    <div id="sharing" class="row-fluid">
-    <%= content_for 'sharing' %>
-    </div>
-    <header>
-    <div id="map"></div>
-    </header>
+            <div id="sharing" class="row-fluid">
+                <%= content_for 'sharing' %>
+            </div>
+            <header>
+            <a title="Back to The Tyee's front page" href="http://thetyee.ca">
+                <div id="map"></div>
+            </a>
+            </header>
             <div id="section-title">
                 <h2>BC Election 2013 Map & Guide</h2> 
             </div>
-    <div id="breadcrumb" class="row-fluid">
-        <div class="span12">
-            <ul class="breadcrumb">
-                <li><a href="http://thetyee.ca/Blogs/TheHook/">Election Hook</a> <span class="divider">/</span></li>
-                <li><a href="/">Map</a> <span class="divider">/</span></li>
-                <li class="active"><%= $riding->{'riding'} %></li>
-            </ul>
-        </div>
-    </div>
-    <div id="content" class="row-fluid">
-        <div id="content-main" class="span8">
-            <h1><%= $riding->{'riding'} %></h1>
-            %if ( $riding->{'dek'} ) { 
-            <h2 class="dek"><%= $riding->{'dek'} %></h2>
-            % }
-            % if ( $riding->{'tyeecall'} ) {
-            <p id="tyeecall" class="alert alert-warning">
-            <i class="icon-exclamation-sign"></i>&nbsp;Tyee projected to win: <%= $riding->{'tyeecall'} %>
-            </p>
-            % }
-            <div id="race" class="row-fluid">
-                <div id="candidates" class="span6"> 
-                    <table class="table table-striped table-bordered">
-                        <caption>This year's candidates so far</caption>
-                        <tbody>
-                            % my $candidates = 0;
-                            % for my $party ( sort keys %$candidate_data ) {
-                            %   my $can = $candidate_data->{ $party };
-                            %   $candidates++ if $can->{'name'}; 
-                            %   next unless $can->{'name'};
-                            <tr>
-                                <th><%== $can->{'url'} ? '<a href="' . $can->{'url'} . '" ' . ' title="Web site for ' . $can->{'name'} . '" >' . $can->{'name'} . '</a>' : $can->{'name'} %><%== $can->{'twitter'} ? ', <a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $can->{'twitter'} . '">@' . $can->{'twitter'} . '</a>' : '' %>
-                                    <span class="label label-<%= lc($can->{'party'}) %> "><%= $can->{'party'} %></span>
-                                </th>
-                            </tr>
+            <div id="breadcrumb" class="row-fluid">
+                <div class="span12">
+                    <ul class="breadcrumb">
+                        <li><a href="http://thetyee.ca/Blogs/TheHook/">Election Hook</a> <span class="divider">/</span></li>
+                        <li><a href="/">Map</a> <span class="divider">/</span></li>
+                        <li class="active"><%= $riding->{'riding'} %></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="content" class="row-fluid">
+                <div id="content-main" class="span8">
+                    <h1><%= $riding->{'riding'} %></h1>
+                    %if ( $riding->{'dek'} ) { 
+                    <h2 class="dek"><%= $riding->{'dek'} %></h2>
+                    % }
+                    % if ( $riding->{'tyeecall'} ) {
+                    <p id="tyeecall" class="alert alert-warning">
+                    <i class="icon-exclamation-sign"></i>&nbsp;Tyee projected to win: <%= $riding->{'tyeecall'} %>
+                    </p>
+                    % }
+                    <div id="race" class="row-fluid">
+                        <div id="candidates" class="span6"> 
+                            <table class="table table-striped table-bordered">
+                                <caption>This year's candidates so far</caption>
+                                <tbody>
+                                    % my $candidates = 0;
+                                    % for my $party ( sort keys %$candidate_data ) {
+                                    %   my $can = $candidate_data->{ $party };
+                                    %   $candidates++ if $can->{'name'}; 
+                                    %   next unless $can->{'name'};
+                                    <tr>
+                                        <th><%== $can->{'url'} ? '<a href="' . $can->{'url'} . '" ' . ' title="Web site for ' . $can->{'name'} . '" >' . $can->{'name'} . '</a>' : $can->{'name'} %><%== $can->{'twitter'} ? ', <a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $can->{'twitter'} . '">@' . $can->{'twitter'} . '</a>' : '' %>
+                                            <span class="label label-<%= $parties->{ $party }{'css'} %> "><a title="Party website" href="<%= $parties->{ $party }{'url'} %>"><%= $can->{'party'} %></a></span>
+                                        </th>
+                                    </tr>
+                                    % }
+                                    % if ( $candidates == 0 ) {
+                                    <tr><th>No candidates declared yet</td></tr>
+                                    % }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="incumbent" class="span6"> 
+                            <h3>Incumbent</h3>
+                            % my $party = $incumbent_party;
+                            % $party   = lc( $party );
+                            % $party   =~ s/ //g;
+                            % if ( $rep_data ) {
+                            <img src="<%= $rep_data->{'photo_url'} %>" alt="
+                            <%= $incumbent_name %>" width="70" height="93" />
+                            <%= $incumbent_name %>&nbsp;<span class="label label-<%= $parties->{ $party }{'css'} %>"><a href="<%= $parties->{ $party }{'url'} %>"><%= $incumbent_party %></a></span>
+                            <br><a href="mailto:<%= $rep_data->{'email'} %>">E-mail address</a><br><a target="_blank" href="<%= $rep_data->{'url'} %>">Official web page</a></p>
+                            % } else {
+                            <%= $incumbent_name %>&nbsp;<span class="label label-<%= $parties->{ $party }{'css'} %>"><%= $incumbent_party %></span>
                             % }
-                            % if ( $candidates == 0 ) {
-                            <tr><th>No candidates declared yet</td></tr>
+                        </div>
+                    </div><!-- / #race -->
+                    <div id="riding-summary" class="well">
+                        <%= content_for 'sharing' %>
+                        <h3>At a glance</h3>
+                        <%== markdown( $riding->{'ataglance'} ) %>
+                        <%== markdown( $riding->{'riding-change-analysis'} ) %>
+                        <h3>Did you know?</h3>
+                        <%== markdown( $riding->{'did-you-know'} ) %>
+                    </div>
+                    <div id="previous-results">
+                        <h3>Previous Election Results</h3>
+                        %# Did we have a by-election? If so, show the table
+                        % if ( $riding->{'bye-date'} ) {
+                        <table class="table table-striped table-bordered">
+                            <caption>Byelection on <%= $riding->{'bye-date'} %>
+                                <br />(Voter turnout: <%= $riding->{'bye-voter-turnout'} %>%)</caption>
+                            <thead>
+                                <tr>
+                                    <th>Candidate</th>
+                                    <th>Votes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                %# May want to move a lot of this into the app and just provide a data structure
+                                % my @columns = ( qw/ bye-winner bye-runnerup1 bye-runnerup2 bye-runnerup3 / ); 
+                                % for my $can ( @columns ) {
+                                % next unless $riding->{ $can . '-name' };
+                                % my $party = $riding->{ $can . '-party' };
+                                % $party   = lc( $party );
+                                % $party   =~ s/ //g;
+                                <th><%= $riding->{ $can . '-name' } %>
+                                    % if ( $parties->{ $party }{'name'} ) {
+                                    <span class="label label-<%= $parties->{ $party }{'css'} %>">
+                                        <a href="<%= $parties->{ $party }{'url'} %>" title="Party website"><%= $parties->{ $party }{'name'} %></a></span>
+                                    % } else {
+                                    <span class="label"><%= $riding->{ $can . '-party' } %></span>
+                                    % }
+                                </th>
+                                <td><%= $riding->{ $can . '-votes' } %></td>
+                            </tr>
                             % }
                         </tbody>
                     </table>
-                </div>
-                <div id="incumbent" class="span6"> 
-                    <h3>Incumbent</h3>
-                    % if ( $rep_data ) {
-                    <img src="<%= $rep_data->{'photo_url'} %>" alt="
-                    <%= $incumbent_name %>" width="70" height="93" />
-                    <%= $incumbent_name %>&nbsp;<span class="label label-<%= lc( $incumbent_party ) %>"><%= $incumbent_party %></span>
-                    <br><a href="mailto:<%= $rep_data->{'email'} %>">E-mail address</a><br><a target="_blank" href="<%= $rep_data->{'url'} %>">Official Web page</a></p>
-                    % } else {
-                    <%= $incumbent_name %>&nbsp;<span class="label label-<%= lc( $incumbent_party ) %>"><%= $incumbent_party %></span>
                     % }
-                </div>
-            </div><!-- / #race -->
-            <div id="riding-summary" class="well">
-            <%= content_for 'sharing' %>
-                <h3>At a glance</h3>
-                <%== markdown( $riding->{'ataglance'} ) %>
-                <%== markdown( $riding->{'riding-change-analysis'} ) %>
-                <h3>Did you know?</h3>
-                <%== markdown( $riding->{'did-you-know'} ) %>
-            </div>
-            <div id="previous-results">
-                <h3>Previous Election Results</h3>
-                %# Did we have a by-election? If so, show the table
-                % if ( $riding->{'bye-date'} ) {
-                <table class="table table-striped table-bordered">
-                    <caption>Byelection on <%= $riding->{'bye-date'} %>
-                        <br />(Voter turnout: <%= $riding->{'bye-voter-turnout'} %>)</caption>
-                    <thead>
-                        <tr>
-                            <th>Candidate</th>
-                            <th>Votes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        %# May want to move a lot of this into the app and just provide a data structure
-                        % my @columns = ( qw/ bye-winner bye-runnerup1 bye-runnerup2 bye-runnerup3 / ); 
-                        % for my $can ( @columns ) {
-                            % next unless $riding->{ $can . '-name' };
-                            % my $party = $riding->{ $can . '-party' };
-                            % $party    =~ s/BC //gi;
-                            <th><%= $riding->{ $can . '-name' } %>
-                                <span class="label label-<%= lc( $party ) %>"><%= $party %></span>
-                            </th>
-                            <td><%= $riding->{ $can . '-votes' } %></td>
+                    <table class="table table-striped table-bordered">
+                        <caption>B.C. General Election 2009
+                            % my $votes = $riding->{'total-votes-2009'};
+                            <br />(Voter turnout: <%= $riding->{'voterturnout2009'} %>%)</caption>
+                        <thead>
+                            <tr>
+                                <th>Candidate</th>
+                                <th>Votes</th>
+                                <th>Percentage</th>
                             </tr>
-                        % }
-                    </tbody>
-                </table>
-                % }
-                <table class="table table-striped table-bordered">
-                    <caption>B.C. General Election 2009
-                        % my $votes = $riding->{'total-votes-2009'};
-                        <br />(Voter turnout: <%= $riding->{'voterturnout2009'} %>%)</caption>
-                    <thead>
-                        <tr>
-                            <th>Candidate</th>
-                            <th>Votes</th>
-                            <th>Percentage</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        %# May want to move a lot of this into the app and just provide a data structure
-                        % my @columns = ( qw/ winner runnerup1 runnerup2 runnerup3 / ); 
-                        % for my $can ( @columns ) {
+                        </thead>
+                        <tbody>
+                            %# May want to move a lot of this into the app and just provide a data structure
+                            % my @columns = ( qw/ winner runnerup1 runnerup2 runnerup3 / ); 
+                            % for my $can ( @columns ) {
                             % next unless $riding->{ $can . '-name' };
                             % my $party = $riding->{ $can . '-party' };
-                            % $party    =~ s/BC //gi;
+                            % $party   = lc( $party );
+                            % $party   =~ s/ //g;
                             <th><%= $riding->{ $can . '-name' } %>
-                                <span class="label label-<%= lc( $party ) %>"><%= $party %></span>
+                                % if ( $parties->{ $party }{'name'} ) {
+                                <span class="label label-<%= $parties->{ $party }{'css'} %>">
+                                    <a href="<%= $parties->{ $party }{'url'} %>" title="Party website"><%= $parties->{ $party }{'name'} %></a></span>
+                                % } else {
+                                <span class="label"><%= $riding->{ $can . '-party' } %></span>
+                                % }
                             </th>
                             <td><%= $riding->{ $can . '-votes' } %></td>
                             % my $percent_vote = ( $riding->{ $can . '-votes' } / $votes ) * 100;
                             <td><%=  round($percent_vote, 1) %>%</td>
-                            </tr>
+                        </tr>
                         % }
                     </tbody>
                 </table>
@@ -210,12 +229,14 @@ $(function() {
                 %# Although I should check, if there's 2005 there's 2001
                 % if ( $riding->{'winner-name_2'} ) {
                 % my $party = $riding->{'winner-party_2'};
-                % $party =~ s/BC //gi;
+                % $party   = lc( $party );
+                % $party   =~ s/ //g;
                 % my $party_2 = $riding->{'winner-party_3'};
-                % $party_2 =~ s/BC //gi;
-                <p><strong>2005 Winner:</strong> <%= $riding->{'winner-name_2'} %>&nbsp;<span class="label label-<%= lc( $party ) %>"><%= $party %></span>
+                % $party_2   = lc( $party );
+                % $party_2  =~ s/ //g;
+                <p><strong>2005 Winner:</strong> <%= $riding->{'winner-name_2'} %>&nbsp;<span class="label label-<%= $parties->{ $party }{'css'} %>"><a href="<%= $parties->{ $party }{'url'} %>" title="Party website"><%= $parties->{ $party }{'name'} %></a></span>
                 <br />
-                <strong>2001 Winner:</strong> <%= $riding->{'winner-name_3'} %>&nbsp;<span class="label label-<%= lc( $party_2 ) %>"><%= $party_2 %></span></p>
+                <strong>2001 Winner:</strong> <%= $riding->{'winner-name_3'} %>&nbsp;<span class="label label-<%= $parties->{ $party }{'css'} %>"><a href="<%= $parties->{ $party }{'url'} %>" title="Party website"><%= $parties->{ $party }{'name'} %></a></span></p>
                 % }
             </div>
             <div id="census-data">

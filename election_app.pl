@@ -62,7 +62,7 @@ get '/riding/:name' => sub {
 
         # 404
         return $self->render_not_found
-            unless $riding;
+        unless $riding;
 
         $cache->set( $name, $riding, "5 minutes" );
         $cache_status = 'fetched';
@@ -82,7 +82,7 @@ get '/riding/:name' => sub {
     # Handle data issues with the incumbent column
     my $incumbent = $riding->{'incumbent'};
     $incumbent =~ s/\s*$//g
-        if $incumbent;    # Remove any trailing whitespace in spreadsheet
+    if $incumbent;    # Remove any trailing whitespace in spreadsheet
 
     # TODO move to JS in ridings.html.ep, just slowing things down
     # Get the incumbent photo and so on from Represent
@@ -95,30 +95,58 @@ get '/riding/:name' => sub {
 
     # Get rid of 'BC ' at the start of party names
     my $party = $riding->{'incumbentparty'};
-    $party =~ s/BC //gi if $party;
+    # TODO this should probably get migrated to a Class
     my $parties = {
-        bcliberals      => 'Liberal',
-        bcndp           => 'NDP',
-        bcgreens        => 'Green',
-        bcconservatives => 'Conservative',
+        bcliberal      => { 
+            name        => 'BC Liberal',
+            url         => 'http://www.bcliberals.com/',
+            css         => 'liberal',
+            facebook    => '',
+            twitter     => '',
+            hashtag     => '',
+        },
+        bcndp           => {
+            name  => 'BC NDP',
+            url   => 'http://www.bcndp.ca/',
+            css         => 'ndp',
+            facebook    => '',
+            twitter     => '',
+            hashtag     => '',
+        },
+        bcgreen        => { 
+            name  => 'BC Green',
+            url   => 'http://www.greenparty.bc.ca/',
+            css   => 'green',
+            facebook    => '',
+            twitter     => '',
+            hashtag     => '',
+        },
+        bcconservative => { 
+            name  => 'BC Conservative',
+            url   => 'http://www.bcconservative.ca/',
+            css   => 'conservative',
+            facebook    => '',
+            twitter     => '',
+            hashtag     => '',
+        }
     };
 
     # TODO move to sub
     my $candidates = {};    # Let's pass the registered candidates in one go
     my @candidate_names;    # A list for page titles
-    for my $p ( qw/ bcconservatives bcgreens bcliberals bcndp other / ) {
+    for my $p ( qw/ bcconservative bcgreen bcliberal bcndp other / ) {
 
-      # Format Twitter handles consistently, regardless of how they're entered
+        # Format Twitter handles consistently, regardless of how they're entered
         my $tw_username = $riding->{ $p . 'twitter' };
         $tw_username =~ s/@//gi if $tw_username;
         if ( $riding->{$p} ) {    # If there's a candidate
             push @candidate_names, $riding->{$p};
         }
         $candidates->{$p} = {
-            name    => $riding->{$p},
-            url     => $riding->{ $p . 'url' },
-            twitter => $tw_username,
-            party   => $riding->{ $p . 'party' } || $parties->{$p},
+            name        => $riding->{$p},
+            url         => $riding->{ $p . 'url' },
+            twitter     => $tw_username,
+            party       => $riding->{ $p . 'party' } || $parties->{ $p }{'name'},
         };
     }
 
@@ -147,6 +175,7 @@ get '/riding/:name' => sub {
         related_stories => _get_tyee_story_urls( $riding->{'tyee-stories'} ),
         cache_status    => $cache_status,
         asset           => $config->{'static_asset_path'},
+        parties           => $parties,
     );
 
     # Render the riding.html.ep template
@@ -173,7 +202,7 @@ sub _get_riding_from_gs {
 
     # Find the spreadsheet by key
     my $spreadsheet
-        = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
+    = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
 
     # Find the main worksheet by title
     my $worksheet = $spreadsheet->worksheet(
@@ -191,7 +220,7 @@ sub _get_avg_from_gs {
 
     # Find the spreadsheet by key
     my $spreadsheet
-        = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
+    = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
 
     # Find the main worksheet by title
     my $worksheet = $spreadsheet->worksheet(
