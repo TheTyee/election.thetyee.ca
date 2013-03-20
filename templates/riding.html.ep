@@ -232,11 +232,11 @@
                 % $party   = lc( $party );
                 % $party   =~ s/ //g;
                 % my $party_2 = $riding->{'winner-party_3'};
-                % $party_2   = lc( $party );
+                % $party_2   = lc( $party_2 );
                 % $party_2  =~ s/ //g;
                 <p><strong>2005 Winner:</strong> <%= $riding->{'winner-name_2'} %>&nbsp;<span class="label label-<%= $parties->{ $party }{'css'} %>"><a href="<%= $parties->{ $party }{'url'} %>" title="Party website"><%= $parties->{ $party }{'name'} %></a></span>
                 <br />
-                <strong>2001 Winner:</strong> <%= $riding->{'winner-name_3'} %>&nbsp;<span class="label label-<%= $parties->{ $party }{'css'} %>"><a href="<%= $parties->{ $party }{'url'} %>" title="Party website"><%= $parties->{ $party }{'name'} %></a></span></p>
+                <strong>2001 Winner:</strong> <%= $riding->{'winner-name_3'} %>&nbsp;<span class="label label-<%= $parties->{ $party_2 }{'css'} %>"><a href="<%= $parties->{ $party_2 }{'url'} %>" title="Party website"><%= $parties->{ $party_2 }{'name'} %></a></span></p>
                 % }
             </div>
             <div id="census-data">
