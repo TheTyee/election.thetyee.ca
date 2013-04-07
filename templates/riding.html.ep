@@ -139,16 +139,20 @@
                         </div>
                         <div id="incumbent" class="span6"> 
                             <h3>Incumbent</h3>
-                            % my $party = $incumbent_party;
-                            % $party   = lc( $party );
-                            % $party   =~ s/ //g;
                             % if ( $rep_data ) {
+                            % my $party = $rep_data->{'party_name'};
+                            % $party   = lc( $party );
+                            % $party   =~ s/ /-/g;
                             <img src="<%= $rep_data->{'photo_url'} %>" alt="
-                            <%= $incumbent_name %>" width="70" height="93" />
-                            <%= $incumbent_name %>&nbsp;<span class="label label-<%= $parties->{ $party }{'slug'} %>" style="background-color: <%= $parties->{ $party }{'colour'} %>;"><a href="<%= $parties->{ $party }{'url'} %>"><%= $incumbent_party %></a></span>
-                            <br><a href="mailto:<%= $rep_data->{'email'} %>">E-mail address</a><br><a target="_blank" href="<%= $rep_data->{'url'} %>">Official web page</a></p>
+                            <%= $rep_data->{'name'} %>" width="70" height="93" />
+                            <strong><%= $rep_data->{'name'} %></strong>&nbsp;<span class="label label-<%= $party %>" style="background-color: <%= $parties->{ $party }{'colour'} %>;"><a href="<%= $parties->{ $party }{'website'} %>"><%= $parties->{ $party }{'shortname'} %></a></span>
+                            <br>
+                            <a href="mailto:<%= $rep_data->{'email'} %>">E-mail address</a><br><a target="_blank" href="<%= $rep_data->{'url'} %>">Official web page</a>
+                            <br />
+                            <a target="_blank" href="<%= $rep_data->{'personal_url'} %>">Personal web page</a>
+                            </p>
                             % } else {
-                            <%= $incumbent_name %>&nbsp;<span class="label label-<%= $parties->{ $party }{'css'} %>"><%= $incumbent_party %></span>
+                            <p class="alert alert-error">Unable to retrieve the representative information for this riding.</p>
                             % }
                         </div>
                     </div><!-- / #race -->
@@ -304,5 +308,5 @@
     </div> <!-- /.row-fluid -->   
     DUMPING:
     <pre>
-    %= dumper( $candidates_new );
+    %= dumper( $rep_data, $candidates_new );
     </pre>

@@ -83,14 +83,19 @@ get '/riding/:name' => sub {
     # Handle data issues with the incumbent column
     my $incumbent = $riding->{'incumbent'};
     $incumbent =~ s/\s*$//g
-    if $incumbent;    # Remove any trailing whitespace in spreadsheet
+        if $incumbent;    # Remove any trailing whitespace in spreadsheet
 
     # TODO move to JS in ridings.html.ep, just slowing things down
     # Get the incumbent photo and so on from Represent
     my $rep_data = $cache->get( $incumbent );
     if ( !defined $rep_data ) {
-        my $rep_query = '/representatives/?name=' . $incumbent;
+        my $rep_query = '/boundaries/british-columbia-electoral-districts/' . $name . '/representatives/';
         $rep_data  = $ua->get( REPRESENT_API . $rep_query )->res->json;
+        $rep_data = $rep_data->{'objects'}[0];
+        # TODO Party names in GS vs. Represent
+        if ( $rep_data->{'party_name'} eq 'New Democratic Party of BC' ) {
+            $rep_data->{'party_name'} = 'BC New Democratic Party';
+        }
         $cache->set( $incumbent, $rep_data, "240 minutes" );
     }
 
@@ -134,7 +139,7 @@ get '/riding/:name' => sub {
     $self->stash(
         riding         => $riding,
         incumbent_name => $incumbent,
-        rep_data       => $rep_data->{'objects'}[0],
+        rep_data       => $rep_data,
 
         #rep_query       => REPRESENT_API . $rep_query,
         incumbent_party => $party,
