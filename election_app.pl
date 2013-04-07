@@ -39,6 +39,7 @@ get '/' => sub {
     $self->stash(
         hook_posts => $hook_posts,
         asset      => $config->{'static_asset_path'},
+        parties    => _get_parties_from_gs(),
     );
 
     # Render the index.html.ep template
@@ -96,40 +97,7 @@ get '/riding/:name' => sub {
     # Get rid of 'BC ' at the start of party names
     my $party = $riding->{'incumbentparty'};
     # TODO this should probably get migrated to a Class
-    my $parties = {
-        bcliberal      => { 
-            name        => 'BC Liberal',
-            url         => 'http://www.bcliberals.com/',
-            css         => 'liberal',
-            facebook    => '',
-            twitter     => '',
-            hashtag     => '',
-        },
-        bcndp           => {
-            name  => 'BC NDP',
-            url   => 'http://www.bcndp.ca/',
-            css         => 'ndp',
-            facebook    => '',
-            twitter     => '',
-            hashtag     => '',
-        },
-        bcgreen        => { 
-            name  => 'BC Green',
-            url   => 'http://www.greenparty.bc.ca/',
-            css   => 'green',
-            facebook    => '',
-            twitter     => '',
-            hashtag     => '',
-        },
-        bcconservative => { 
-            name  => 'BC Conservative',
-            url   => 'http://www.bcconservative.ca/',
-            css   => 'conservative',
-            facebook    => '',
-            twitter     => '',
-            hashtag     => '',
-        }
-    };
+    my $parties = _get_parties_from_gs();
 
     # TODO move to sub
     my $candidates = {};    # Let's pass the registered candidates in one go
@@ -150,6 +118,7 @@ get '/riding/:name' => sub {
         };
     }
 
+    # String to put candidate(s) name(s) in riding page title
     my $can_names;
     my $candidate_last = pop @candidate_names;
     if ( @candidate_names == 1 ) {
@@ -175,7 +144,8 @@ get '/riding/:name' => sub {
         related_stories => _get_tyee_story_urls( $riding->{'tyee-stories'} ),
         cache_status    => $cache_status,
         asset           => $config->{'static_asset_path'},
-        parties           => $parties,
+        parties         => $parties,
+        candidates_new  => _get_candidates_from_gs( $name ),
     );
 
     # Render the riding.html.ep template
@@ -213,6 +183,48 @@ sub _get_riding_from_gs {
     $riding = $row->{'content'};
 
     return $riding;
+}
+sub _get_parties_from_gs {
+
+    # Find the spreadsheet by key
+    my $spreadsheet
+    = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
+
+    # Find the main worksheet by title
+    my $worksheet = $spreadsheet->worksheet(
+        { title => $config->{'worksheet_name_parties'}, } );
+
+    my @rows = $worksheet->rows();
+    #$riding = $row->{'content'};
+    my $parties = {};
+    for my $party ( @rows ) {
+        my $slug = $party->content->{'slug'};
+        $parties->{ $slug } = $party->content;
+    }
+    return $parties;
+}
+
+sub _get_candidates_from_gs {
+    my ( $name ) = @_;
+
+    # Find the spreadsheet by key
+    my $spreadsheet
+    = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
+
+    # Find the main worksheet by title
+    my $worksheet = $spreadsheet->worksheet(
+        { title => $config->{'worksheet_name_candidates'}, } );
+
+    my @rows = $worksheet->rows( { sq => 'slug = "' . $name . '"' } );
+    #$riding = $row->{'content'};
+    my $candidates = {};
+    for my $candidate ( @rows ) {
+        my $slug = lc( $candidate->content->{'lastname'} );
+        $candidate->content->{'twitter'} =~ s/@//g;;
+        $slug =~ s/\W/-/g;
+        $candidates->{ $slug } = $candidate->content;
+    }
+    return $candidates;
 }
 
 sub _get_avg_from_gs {
