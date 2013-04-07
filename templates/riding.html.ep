@@ -103,12 +103,12 @@
             <div id="content" class="row-fluid">
                 <div id="content-main" class="span8">
                     <h1><%= $riding->{'riding'} %></h1>
-                    %if ( $riding->{'dek'} ) { 
+                    % if ( $riding->{'dek'} ) { 
                     <h2 class="dek"><%= $riding->{'dek'} %></h2>
                     % }
                     % if ( $riding->{'tyeecall'} ) {
                     <p id="tyeecall" class="alert alert-warning">
-                    <i class="icon-exclamation-sign"></i>&nbsp;Tyee projected to win: <%= $riding->{'tyeecall'} %>
+                        <i class="icon-exclamation-sign"></i>&nbsp;Tyee projected to win: <%= $riding->{'tyeecall'} %>
                     </p>
                     % }
                     <div id="race" class="row-fluid">
@@ -119,20 +119,14 @@
                                     % my $incumbent;
                                     % for my $candidate ( sort keys $candidates_new ) {
                                     % my $can = $candidates_new->{ $candidate };
-                                    % if ( $can->{'incumbent'} eq 'yes' ) {
-                                    %      $incumbent = $can;
-                                    % } 
                                     <tr>
-                                        <th><span class="label label-<%= $parties->{ $can->{'partyslug'} }{'slug'} %>" style="background-color: <%= $parties->{ $can->{'partyslug'} }{'colour'} %>;"><%== $can->{'url'} ? '<a href="' . $can->{'url'} . '" ' . ' title="Web site for ' . $can->{'fullname'} . '" >' . $can->{'fullname'} . '</a>' : $can->{'fullname'} %>&nbsp;|&nbsp;<%== $parties->{ $can->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $can->{'partyslug'} }{'website'} . '">' . $parties->{ $can->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $can->{'partyslug'} }{'shortname'} %></span><br />
-                                            <%== $can->{'twitter'} ? '<span class="can-twitter"><a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $can->{'twitter'} . '">@' . $can->{'twitter'} . '</a></span><br />' : '' %>
-                                            <%== $can->{'facebook'} ? '<span class="can-facebook"><a target="_blank" href="' . $can->{'facebook'} . '">facebook</a></span><br />' : '' %>
+                                        <th>
+                                            <span class="label label-<%= $can->{'partyslug'} %>" style="background-color: <%= $parties->{ $can->{'partyslug'} }{'colour'} %>;"><%== $can->{'url'} ? '<a href="' . $can->{'url'} . '" ' . ' title="Web site for ' . $can->{'fullname'} . '" >' . $can->{'fullname'} . '</a>' : $can->{'fullname'} %>&nbsp;|&nbsp;<%== $parties->{ $can->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $can->{'partyslug'} }{'website'} . '">' . $parties->{ $can->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $can->{'partyslug'} }{'shortname'} %></span><br />
+                                           <%== $can->{'twitter'} ? '<span class="can-twitter"><a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $can->{'twitter'} . '">@' . $can->{'twitter'} . '</a></span><br />' : '' %>
+                                           <%== $can->{'facebook'} ? '<span class="can-facebook"><a target="_blank" href="' . $can->{'facebook'} . '">facebook</a></span><br />' : '' %>
                                             
                                        </th>
                                     </tr>
-                                    % }
-                                    %# There are candidates in each riding, but hey
-                                    % if ( keys $candidates_new == 0 ) {
-                                    <tr><th>No candidates declared yet</td></tr>
                                     % }
                                 </tbody>
                             </table>
@@ -187,8 +181,8 @@
                                 % $party   =~ s/ //g;
                                 <th><%= $riding->{ $can . '-name' } %>
                                     % if ( $parties->{ $party }{'name'} ) {
-                                    <span class="label label-<%= $parties->{ $party }{'css'} %>">
-                                        <a href="<%= $parties->{ $party }{'url'} %>" title="Party website"><%= $parties->{ $party }{'name'} %></a></span>
+                                    <span class="label label-<%= $parties->{ $party }{'slug'} %>">
+                                        <a href="<%= $parties->{ $party }{'website'} %>" title="Party website"><%= $parties->{ $party }{'shortname'} %></a></span>
                                     % } else {
                                     <span class="label"><%= $riding->{ $can . '-party' } %></span>
                                     % }
@@ -217,11 +211,11 @@
                             % next unless $riding->{ $can . '-name' };
                             % my $party = $riding->{ $can . '-party' };
                             % $party   = lc( $party );
-                            % $party   =~ s/ //g;
+                            % $party   =~ s/-//g;
                             <th><%= $riding->{ $can . '-name' } %>
-                                % if ( $parties->{ $party }{'name'} ) {
-                                <span class="label label-<%= $parties->{ $party }{'css'} %>">
-                                    <a href="<%= $parties->{ $party }{'url'} %>" title="Party website"><%= $parties->{ $party }{'name'} %></a></span>
+                                    % if ( $parties->{ $party } ) {
+                                    <span class="label label-<%= $parties->{ $party }{'slug'} %>">
+                                        <a href="<%= $parties->{ $party }{'website'} %>" title="Party website"><%= $parties->{ $party }{'shortname'} %></a></span>
                                 % } else {
                                 <span class="label"><%= $riding->{ $can . '-party' } %></span>
                                 % }
