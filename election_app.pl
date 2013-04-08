@@ -79,15 +79,9 @@ get '/riding/:name' => sub {
         $cache->set( $avg_row_name, $avg, "240 minutes" );
     }
 
-    # TODO move to sub
-    # Handle data issues with the incumbent column
-    my $incumbent = $riding->{'incumbent'};
-    $incumbent =~ s/\s*$//g
-        if $incumbent;    # Remove any trailing whitespace in spreadsheet
-
     # TODO move to JS in ridings.html.ep, just slowing things down
     # Get the incumbent photo and so on from Represent
-    my $rep_data = $cache->get( $incumbent );
+    my $rep_data = $cache->get( $name . '-incumbent' );
     if ( !defined $rep_data ) {
         my $rep_query = '/boundaries/british-columbia-electoral-districts/' . $name . '/representatives/';
         $rep_data  = $ua->get( REPRESENT_API . $rep_query )->res->json;
@@ -96,61 +90,29 @@ get '/riding/:name' => sub {
         if ( $rep_data->{'party_name'} eq 'New Democratic Party of BC' ) {
             $rep_data->{'party_name'} = 'BC New Democratic Party';
         }
-        $cache->set( $incumbent, $rep_data, "240 minutes" );
+        $cache->set( $name . '-incumbent', $rep_data, "240 minutes" );
     }
 
-    # Get rid of 'BC ' at the start of party names
-    my $party = $riding->{'incumbentparty'};
     # TODO this should probably get migrated to a Class
-    my $parties = _get_parties_from_gs();
+    my $parties      = _get_parties_from_gs();
+    my $party_lookup = _get_party_lookup( $parties ); 
 
-    # TODO move to sub
-    my $candidates = {};    # Let's pass the registered candidates in one go
-    my @candidate_names;    # A list for page titles
-    for my $p ( qw/ bcconservative bcgreen bcliberal bcndp other / ) {
-
-        # Format Twitter handles consistently, regardless of how they're entered
-        my $tw_username = $riding->{ $p . 'twitter' };
-        $tw_username =~ s/@//gi if $tw_username;
-        if ( $riding->{$p} ) {    # If there's a candidate
-            push @candidate_names, $riding->{$p};
-        }
-        $candidates->{$p} = {
-            name        => $riding->{$p},
-            url         => $riding->{ $p . 'url' },
-            twitter     => $tw_username,
-            party       => $riding->{ $p . 'party' } || $parties->{ $p }{'name'},
-        };
-    }
-
-    # String to put candidate(s) name(s) in riding page title
-    my $can_names;
-    my $candidate_last = pop @candidate_names;
-    if ( @candidate_names == 1 ) {
-        $can_names = $candidate_names[0] . ' and ' . $candidate_last;
-    } elsif ( @candidate_names > 1 ) {
-        $can_names = join( ', ', @candidate_names );
-        $can_names .= ', and ' . $candidate_last;
-    } else {
-        $can_names = $candidate_last;
-    }
+    # New approach to getting candidate data from GS
+    my $candidates_new = _get_candidates_from_gs( $name );
+    my $candidate_names_new = _get_candidate_names( $candidates_new );
 
     # Stash the data from the spreadsheet for use in the template
     $self->stash(
         riding         => $riding,
-        incumbent_name => $incumbent,
         rep_data       => $rep_data,
-
-        #rep_query       => REPRESENT_API . $rep_query,
-        incumbent_party => $party,
-        candidate_data  => $candidates,
-        candidate_names => $can_names,
+        candidate_names => $candidate_names_new,
         bc_averages     => $avg,
         related_stories => _get_tyee_story_urls( $riding->{'tyee-stories'} ),
         cache_status    => $cache_status,
         asset           => $config->{'static_asset_path'},
         parties         => $parties,
-        candidates_new  => _get_candidates_from_gs( $name ),
+        party_lookup    => $party_lookup,
+        candidates_new  => $candidates_new,
     );
 
     # Render the riding.html.ep template
@@ -209,6 +171,14 @@ sub _get_parties_from_gs {
     return $parties;
 }
 
+sub _get_party_lookup {
+    my ( $parties ) = @_;
+    my $party_lookup = {};
+    for my $party ( sort keys $parties ) {
+        $party_lookup->{ $parties->{ $party }{'shortname'} } = $parties->{ $party }->{'slug'};
+    }
+    return $party_lookup;
+}
 sub _get_candidates_from_gs {
     my ( $name ) = @_;
 
@@ -230,6 +200,26 @@ sub _get_candidates_from_gs {
         $candidates->{ $slug } = $candidate->content;
     }
     return $candidates;
+}
+
+sub _get_candidate_names {
+    my ( $candidates ) = @_;
+    my @candidate_names;
+    my $can_names_str;
+    for my $key ( sort keys $candidates ) {
+        my $can = $candidates->{ $key };
+        push @candidate_names, $can->{'fullname'}; 
+    }
+    my $candidate_last = pop @candidate_names;
+        if ( @candidate_names == 1 ) {
+            $can_names_str = $candidate_names[0] . ' and ' . $candidate_last;
+        } elsif ( @candidate_names > 1 ) {
+            $can_names_str = join( ', ', @candidate_names );
+            $can_names_str .= ', and ' . $candidate_last;
+        } else {
+            $can_names_str = $candidate_last;
+        }
+    return $can_names_str;
 }
 
 sub _get_avg_from_gs {
