@@ -116,8 +116,8 @@
                             <table class="table table-striped table-bordered">
                                 <caption>This year's candidates so far</caption>
                                 <tbody>
-                                    % for my $candidate ( sort keys $candidates_new ) {
-                                    % my $can = $candidates_new->{ $candidate };
+                                    % for my $candidate ( sort keys $candidates ) {
+                                    % my $can = $candidates->{ $candidate };
                                     <tr>
                                         <th>
                                             <%== $can->{'url'} ? '<a href="' . $can->{'url'} . '" ' . ' title="Web site for ' . $can->{'fullname'} . '" >' . $can->{'fullname'} . '</a>' : $can->{'fullname'} %>&nbsp;<span class="label label-<%= $can->{'partyslug'} %>" style="background-color: <%= $parties->{ $can->{'partyslug'} }{'colour'} %>;"><%== $parties->{ $can->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $can->{'partyslug'} }{'website'} . '">' . $parties->{ $can->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $can->{'partyslug'} }{'shortname'} %></span><br />

@@ -98,21 +98,21 @@ get '/riding/:name' => sub {
     my $party_lookup = _get_party_lookup( $parties ); 
 
     # New approach to getting candidate data from GS
-    my $candidates_new = _get_candidates_from_gs( $name );
-    my $candidate_names_new = _get_candidate_names( $candidates_new );
+    my $candidates = _get_candidates_from_gs( $name );
+    my $candidate_names = _get_candidate_names( $candidates );
 
     # Stash the data from the spreadsheet for use in the template
     $self->stash(
         riding         => $riding,
         rep_data       => $rep_data,
-        candidate_names => $candidate_names_new,
+        candidate_names => $candidate_names,
         bc_averages     => $avg,
         related_stories => _get_tyee_story_urls( $riding->{'tyee-stories'} ),
         cache_status    => $cache_status,
         asset           => $config->{'static_asset_path'},
         parties         => $parties,
         party_lookup    => $party_lookup,
-        candidates_new  => $candidates_new,
+        candidates      => $candidates,
     );
 
     # Render the riding.html.ep template
