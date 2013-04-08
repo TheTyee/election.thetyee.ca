@@ -103,12 +103,12 @@
             <div id="content" class="row-fluid">
                 <div id="content-main" class="span8">
                     <h1><%= $riding->{'riding'} %></h1>
-                    %if ( $riding->{'dek'} ) { 
+                    % if ( $riding->{'dek'} ) { 
                     <h2 class="dek"><%= $riding->{'dek'} %></h2>
                     % }
                     % if ( $riding->{'tyeecall'} ) {
                     <p id="tyeecall" class="alert alert-warning">
-                    <i class="icon-exclamation-sign"></i>&nbsp;Tyee projected to win: <%= $riding->{'tyeecall'} %>
+                        <i class="icon-exclamation-sign"></i>&nbsp;Tyee projected to win: <%= $riding->{'tyeecall'} %>
                     </p>
                     % }
                     <div id="race" class="row-fluid">
@@ -116,35 +116,36 @@
                             <table class="table table-striped table-bordered">
                                 <caption>This year's candidates so far</caption>
                                 <tbody>
-                                    % my $candidates = 0;
-                                    % for my $party ( sort keys %$candidate_data ) {
-                                    %   my $can = $candidate_data->{ $party };
-                                    %   $candidates++ if $can->{'name'}; 
-                                    %   next unless $can->{'name'};
+                                    % for my $candidate ( sort keys $candidates ) {
+                                    % my $can = $candidates->{ $candidate };
                                     <tr>
-                                        <th><%== $can->{'url'} ? '<a href="' . $can->{'url'} . '" ' . ' title="Web site for ' . $can->{'name'} . '" >' . $can->{'name'} . '</a>' : $can->{'name'} %><%== $can->{'twitter'} ? ', <a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $can->{'twitter'} . '">@' . $can->{'twitter'} . '</a>' : '' %>
-                                            <span class="label label-<%= $parties->{ $party }{'css'} %> "><a title="Party website" href="<%= $parties->{ $party }{'url'} %>"><%= $can->{'party'} %></a></span>
-                                        </th>
+                                        <th>
+                                            <%== $can->{'url'} ? '<a href="' . $can->{'url'} . '" ' . ' title="Web site for ' . $can->{'fullname'} . '" >' . $can->{'fullname'} . '</a>' : $can->{'fullname'} %>&nbsp;<span class="label label-<%= $can->{'partyslug'} %>" style="background-color: <%= $parties->{ $can->{'partyslug'} }{'colour'} %>;"><%== $parties->{ $can->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $can->{'partyslug'} }{'website'} . '">' . $parties->{ $can->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $can->{'partyslug'} }{'shortname'} %></span><br />
+                                           <%== $can->{'twitter'} ? '<span class="can-twitter"><a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $can->{'twitter'} . '">@' . $can->{'twitter'} . '</a></span><br />' : '' %>
+                                           <%== $can->{'facebook'} ? '<span class="can-facebook"><a target="_blank" href="' . $can->{'facebook'} . '">facebook</a></span><br />' : '' %>
+                                            
+                                       </th>
                                     </tr>
-                                    % }
-                                    % if ( $candidates == 0 ) {
-                                    <tr><th>No candidates declared yet</td></tr>
                                     % }
                                 </tbody>
                             </table>
                         </div>
                         <div id="incumbent" class="span6"> 
                             <h3>Incumbent</h3>
-                            % my $party = $incumbent_party;
-                            % $party   = lc( $party );
-                            % $party   =~ s/ //g;
                             % if ( $rep_data ) {
+                            % my $party = $rep_data->{'party_name'};
+                            % $party   = lc( $party );
+                            % $party   =~ s/ /-/g;
                             <img src="<%= $rep_data->{'photo_url'} %>" alt="
-                            <%= $incumbent_name %>" width="70" height="93" />
-                            <%= $incumbent_name %>&nbsp;<span class="label label-<%= $parties->{ $party }{'css'} %>"><a href="<%= $parties->{ $party }{'url'} %>"><%= $incumbent_party %></a></span>
-                            <br><a href="mailto:<%= $rep_data->{'email'} %>">E-mail address</a><br><a target="_blank" href="<%= $rep_data->{'url'} %>">Official web page</a></p>
+                            <%= $rep_data->{'name'} %>" width="70" height="93" />
+                            <strong><%= $rep_data->{'name'} %></strong>&nbsp;<span class="label label-<%= $party %>" style="background-color: <%= $parties->{ $party }{'colour'} %>;"><a href="<%= $parties->{ $party }{'website'} %>"><%= $parties->{ $party }{'shortname'} %></a></span>
+                            <br>
+                            <a href="mailto:<%= $rep_data->{'email'} %>">E-mail address</a><br><a target="_blank" href="<%= $rep_data->{'url'} %>">Official web page</a>
+                            <br />
+                            <a target="_blank" href="<%= $rep_data->{'personal_url'} %>">Personal web page</a>
+                            </p>
                             % } else {
-                            <%= $incumbent_name %>&nbsp;<span class="label label-<%= $parties->{ $party }{'css'} %>"><%= $incumbent_party %></span>
+                            <p class="alert alert-error">Unable to retrieve the representative information for this riding.</p>
                             % }
                         </div>
                     </div><!-- / #race -->
@@ -175,15 +176,9 @@
                                 % for my $can ( @columns ) {
                                 % next unless $riding->{ $can . '-name' };
                                 % my $party = $riding->{ $can . '-party' };
-                                % $party   = lc( $party );
-                                % $party   =~ s/ //g;
                                 <th><%= $riding->{ $can . '-name' } %>
-                                    % if ( $parties->{ $party }{'name'} ) {
-                                    <span class="label label-<%= $parties->{ $party }{'css'} %>">
-                                        <a href="<%= $parties->{ $party }{'url'} %>" title="Party website"><%= $parties->{ $party }{'name'} %></a></span>
-                                    % } else {
-                                    <span class="label"><%= $riding->{ $can . '-party' } %></span>
-                                    % }
+                                    <span class="label label-<%= $party_lookup->{ $party } %>" style="background-color: <%= $parties->{ $party_lookup->{ $party } }{'colour'} %>;">
+                                       <%== $parties->{ $party_lookup->{ $party } }{'website'} ? '<a href="' . $parties->{ $party_lookup->{ $party } }{'website'} . '" title="Party website">' . $parties->{ $party_lookup->{ $party } }{'shortname'} . '</a>' : $party %></span>
                                 </th>
                                 <td><%= $riding->{ $can . '-votes' } %></td>
                             </tr>
@@ -208,15 +203,9 @@
                             % for my $can ( @columns ) {
                             % next unless $riding->{ $can . '-name' };
                             % my $party = $riding->{ $can . '-party' };
-                            % $party   = lc( $party );
-                            % $party   =~ s/ //g;
                             <th><%= $riding->{ $can . '-name' } %>
-                                % if ( $parties->{ $party }{'name'} ) {
-                                <span class="label label-<%= $parties->{ $party }{'css'} %>">
-                                    <a href="<%= $parties->{ $party }{'url'} %>" title="Party website"><%= $parties->{ $party }{'name'} %></a></span>
-                                % } else {
-                                <span class="label"><%= $riding->{ $can . '-party' } %></span>
-                                % }
+                                    <span class="label label-<%= $party_lookup->{ $party } %>" style="background-color: <%= $parties->{ $party_lookup->{ $party } }{'colour'} %>;">
+                                       <%== $parties->{ $party_lookup->{ $party } }{'website'} ? '<a href="' . $parties->{ $party_lookup->{ $party } }{'website'} . '" title="Party website">' . $parties->{ $party_lookup->{ $party } }{'shortname'} . '</a>' : $party %></span>
                             </th>
                             <td><%= $riding->{ $can . '-votes' } %></td>
                             % my $percent_vote = ( $riding->{ $can . '-votes' } / $votes ) * 100;
@@ -228,15 +217,11 @@
                 %# Do we have data from 2005 and 2001?
                 %# Although I should check, if there's 2005 there's 2001
                 % if ( $riding->{'winner-name_2'} ) {
-                % my $party = $riding->{'winner-party_2'};
-                % $party   = lc( $party );
-                % $party   =~ s/ //g;
-                % my $party_2 = $riding->{'winner-party_3'};
-                % $party_2   = lc( $party_2 );
-                % $party_2  =~ s/ //g;
-                <p><strong>2005 Winner:</strong> <%= $riding->{'winner-name_2'} %>&nbsp;<span class="label label-<%= $parties->{ $party }{'css'} %>"><a href="<%= $parties->{ $party }{'url'} %>" title="Party website"><%= $parties->{ $party }{'name'} %></a></span>
+                % my $party_2005 = $riding->{'winner-party_2'};
+                % my $party_2001 = $riding->{'winner-party_3'};
+                <p><strong>2005 Winner:</strong> <%= $riding->{'winner-name_2'} %>&nbsp;<span class="label label-<%= $party_lookup->{ $party_2005 } %>" style="background-color: <%= $parties->{ $party_lookup->{ $party_2005 } }{'colour'} %>;"><%== $parties->{ $party_lookup->{ $party_2005 } }{'website'} ? '<a href="' . $parties->{ $party_lookup->{ $party_2005 } }{'website'} . '" title="Party website">' . $parties->{ $party_lookup->{ $party_2005 } }{'shortname'} . '</a>' : $party_2005 %></span>
                 <br />
-                <strong>2001 Winner:</strong> <%= $riding->{'winner-name_3'} %>&nbsp;<span class="label label-<%= $parties->{ $party_2 }{'css'} %>"><a href="<%= $parties->{ $party_2 }{'url'} %>" title="Party website"><%= $parties->{ $party_2 }{'name'} %></a></span></p>
+                <p><strong>2001 Winner:</strong> <%= $riding->{'winner-name_3'} %>&nbsp;<span class="label label-<%= $party_lookup->{ $party_2001 } %>" style="background-color: <%= $parties->{ $party_lookup->{ $party_2001 } }{'colour'} %>;"><%== $parties->{ $party_lookup->{ $party_2001 } }{'website'} ? '<a href="' . $parties->{ $party_lookup->{ $party_2001 } }{'website'} . '" title="Party website">' . $parties->{ $party_lookup->{ $party_2001 } }{'shortname'} . '</a>' : $party_2001 %></span>
                 % }
             </div>
             <div id="census-data">
@@ -283,6 +268,14 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <div id="reader-involvement" class="alert alert-warning">
+                <p>
+                Help us make these riding pages richer. Email your big issues, story ideas or scuttlebutt <a href="http://www.google.com/recaptcha/mailhide/d?k=01mUCmm4B0TtUYLcDfyl8yqw==&c=DpDpCpqFpinNpOeUeUDc8C_lqrkfpjRKl_us2U6eNck=">here</a>.
+                </p>
+                <p>
+                And for the latest Tyee election reporting, stay tuned to the <a href="http://thetyee.ca/Blogs/TheHook/">Election Hook</a>.
+                <p>
             </div>
         </div><!-- /.span8 -->
         <div id="content-sidebar" class="span4">
