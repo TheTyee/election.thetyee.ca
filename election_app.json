@@ -1,9 +1,9 @@
 {
-    "app_version"               : "1.0.5",
+    "app_version"               : "v1.1.0",
     "worksheet_name"            : "Guide",
     "worksheet_name_ridings"    : "Ridings",
     "worksheet_name_parties"    : "Parties",
     "worksheet_name_candidates" : "Candidates",
     "avg_row_name"              : "Averages",
-    "static_asset_path"         : "http://static.apps.thetyee.ca/election/v1.0.5"
+    "static_asset_path"         : "http://static.apps.thetyee.ca/election/v1.1.0"
 }
