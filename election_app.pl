@@ -39,7 +39,6 @@ get '/' => sub {
     $self->stash(
         hook_posts => $hook_posts,
         asset      => $config->{'static_asset_path'},
-        parties    => _get_parties_from_gs(),
     );
 
     # Render the index.html.ep template

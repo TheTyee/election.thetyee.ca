@@ -67,6 +67,3 @@
                 %= include 'sidebar'
                 </div><!-- / .span4 -->
             </div> <!-- /.row-fluid -->
-            DUMPING:<pre>
-            %= dumper( $parties )
-            </pre>
