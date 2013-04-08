@@ -73,7 +73,7 @@
             </div>
             <div class="row-fluid" id="footer">
             <%= content_for 'footer_nav' %>
-            <p class="copyright">&copy; <a href="http://thetyee.ca/About/Intro/" title="B.C.'s Home for News, Culture and Solutions">The Tyee 2013</a> &bull; Managed hosting by <a href="http://www.gossamer-threads.com/" title="Gossamer Threads: Vancouver-based Web Technology Consultancy">Gossamer Threads</a> &bull; Election App hand-crafted by <a href="http://phillipadsmith.com" title="Digital publishing consultant, online advocacy specialist, and strategic convener">@phillipadsmith</a> &bull; Open data provided by <a title="Represent | elected officials and electoral districts database" href="http://represent.opennorth.ca/">Represent</a>. <br />v<%= config->{'app_version'} %></p>
+            <p class="copyright">&copy; <a href="http://thetyee.ca/About/Intro/" title="B.C.'s Home for News, Culture and Solutions">The Tyee 2013</a> &bull; Managed hosting by <a href="http://www.gossamer-threads.com/" title="Gossamer Threads: Vancouver-based Web Technology Consultancy">Gossamer Threads</a> &bull; <a href="https://github.com/phillipadsmith/election.thetyee.ca">Election App</a> hand-crafted by <a href="http://phillipadsmith.com" title="Digital publishing consultant, online advocacy specialist, and strategic convener">@phillipadsmith</a> &bull; Representative data provided by <a title="Represent | elected officials and electoral districts database" href="http://represent.opennorth.ca/">Represent</a>. <br />v<%= config->{'app_version'} %></p>
             </div>
         </div> <!-- /container -->
         <!-- Le javascript
