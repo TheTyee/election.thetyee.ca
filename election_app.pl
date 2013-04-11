@@ -77,7 +77,7 @@ get '/riding/:name' => sub {
         $avg = _get_avg_from_gs( $avg_row_name );
         $cache->set( $avg_row_name, $avg, "240 minutes" );
     }
-
+    # TODO First most to sub, then...
     # TODO move to JS in ridings.html.ep, just slowing things down
     # Get the incumbent photo and so on from Represent
     my $rep_data = $cache->get( $name . '-incumbent' );
@@ -118,6 +118,30 @@ get '/riding/:name' => sub {
     $self->render( 'riding' );
 };
 
+# Route requests to /
+get '/candidates' => sub {
+    my $self = shift;
+
+    my ( $candidates, $row_count ) = _get_candidates();
+    my $cache_status = 'TK';
+    my $parties      = _get_parties_from_gs();
+    my $party_lookup = _get_party_lookup( $parties ); 
+    my $stats        = _get_candidate_stats( $candidates, $parties );
+    # Stash the data that we'll use in the index template
+    $self->stash(
+        candidates => $candidates,
+        stats      => $stats,
+        cache_status    => $cache_status,
+        asset           => $config->{'static_asset_path'},
+        parties         => $parties,
+        party_lookup    => $party_lookup,
+        rows            => $row_count,
+    );
+
+    # Render the index.html.ep template
+    $self->render( 'candidates' );
+};
+
 ########################################################################
 # Sub-routines
 ########################################################################
@@ -132,7 +156,6 @@ sub _get_tyee_story_urls {
     }
     return \@stories;
 }
-
 sub _get_riding_from_gs {
     my ( $name ) = @_;
 
@@ -169,7 +192,6 @@ sub _get_parties_from_gs {
     }
     return $parties;
 }
-
 sub _get_party_lookup {
     my ( $parties ) = @_;
     my $party_lookup = {};
@@ -179,6 +201,8 @@ sub _get_party_lookup {
     return $party_lookup;
 }
 sub _get_candidates_from_gs {
+    # TODO Return an array here instead
+    # TODO Do the caching here also
     my ( $name ) = @_;
 
     # Find the spreadsheet by key
@@ -188,9 +212,12 @@ sub _get_candidates_from_gs {
     # Find the main worksheet by title
     my $worksheet = $spreadsheet->worksheet(
         { title => $config->{'worksheet_name_candidates'}, } );
-
-    my @rows = $worksheet->rows( { sq => 'slug = "' . $name . '"' } );
-    #$riding = $row->{'content'};
+    my @rows;
+    if ( $name ) { # Get only the rows matching the riding name
+        @rows = $worksheet->rows( { sq => 'slug = "' . $name . '"' } );
+    } else {       # Get all the rows / candidates
+        @rows = $worksheet->rows;
+    };
     my $candidates = {};
     for my $candidate ( @rows ) {
         my $slug = lc( $candidate->content->{'lastname'} );
@@ -200,7 +227,24 @@ sub _get_candidates_from_gs {
     }
     return $candidates;
 }
+sub _get_candidates {
 
+    # Find the spreadsheet by key
+    my $spreadsheet
+    = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
+
+    # Find the main worksheet by title
+    my $worksheet = $spreadsheet->worksheet(
+        { title => $config->{'worksheet_name_candidates'}, } );
+    my @rows = $worksheet->rows;
+    my $candidates = [];
+    for my $candidate ( @rows ) {
+        $candidate->content->{'twitter'} =~ s/@//g;;
+        push @$candidates, $candidate->content;
+    }
+    my $row_count = scalar @rows;
+    return $candidates, $row_count;
+}
 sub _get_candidate_names {
     my ( $candidates ) = @_;
     my @candidate_names;
@@ -220,7 +264,6 @@ sub _get_candidate_names {
         }
     return $can_names_str;
 }
-
 sub _get_avg_from_gs {
     my ( $avg_row ) = @_;
 
@@ -238,6 +281,31 @@ sub _get_avg_from_gs {
 
     return $avg;
 }
+
+sub _get_candidate_stats {
+    my	( $candidates, $parties )	= @_;
+    my $stats = {};
+    for my $can ( @$candidates ) {
+        for my $party ( keys $parties ) {
+            my $p = $parties->{ $party };
+            if ( $can->{'party'} eq $p->{'officialname'} ) {
+                $stats->{ $p->{'slug'} }{'num'}++;
+                if ( $can->{'gender'} eq 'f' ) {
+                    $stats->{ $p->{'slug'} }{'women'}++;
+                    $stats->{'women'}++;
+                } elsif ( $can->{'gender'} eq 'm' ) {
+                    $stats->{ $p->{'slug'} }{'men'}++;
+                    $stats->{'men'}++;
+                }
+                if ( $can->{'incumbent'} eq 'yes' ) {
+                    $stats->{ $p->{'slug'} }{'incumbents'}++;
+                    $stats->{'incumbents'}++;
+                }
+            }
+        }
+    }
+    return $stats;
+} ## --- end sub _get_candidates
 
 ########################################################################
 # For development, or deployment with Plack
