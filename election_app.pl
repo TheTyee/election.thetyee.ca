@@ -34,11 +34,12 @@ get '/' => sub {
         $hook_posts = $hook_json->{'hits'}{'hits'};
         $cache->set( 'hook_posts', $hook_posts, "5 minutes" );
     }
-
+    my $poll = _get_poll();
     # Stash the data that we'll use in the index template
     $self->stash(
         hook_posts => $hook_posts,
         asset      => $config->{'static_asset_path'},
+        poll       => $poll,
     );
 
     # Render the index.html.ep template
@@ -95,10 +96,10 @@ get '/riding/:name' => sub {
     # TODO this should probably get migrated to a Class
     my $parties      = _get_parties_from_gs();
     my $party_lookup = _get_party_lookup( $parties ); 
-
     # New approach to getting candidate data from GS
     my $candidates = _get_candidates_from_gs( $name );
     my $candidate_names = _get_candidate_names( $candidates );
+    my $poll = _get_poll();
 
     # Stash the data from the spreadsheet for use in the template
     $self->stash(
@@ -112,6 +113,7 @@ get '/riding/:name' => sub {
         parties         => $parties,
         party_lookup    => $party_lookup,
         candidates      => $candidates,
+        poll            => $poll,
     );
 
     # Render the riding.html.ep template
@@ -237,6 +239,11 @@ sub _get_avg_from_gs {
     my $avg = $row->{'content'};
 
     return $avg;
+}
+
+sub _get_poll {
+    my $poll_html  = $ua->get( $config->{'remote_inc_path'} . '/Polls/include.php' )->res->body;
+    return $poll_html;
 }
 
 ########################################################################

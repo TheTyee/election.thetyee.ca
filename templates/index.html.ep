@@ -61,6 +61,8 @@
                         <p>That's the latest Tyee election reporting &mdash; but hardly all of it. <a href="http://thetyee.ca/Blogs/TheHook/">More Election Hook here.</a></p>
                      </div>
                    <hr class="soften" />
+                   <%== $poll %>
+                   <hr class="soften" />
                 </div><!-- /.span8 -->
                 <div id="content-sidebar" class="span4">
                 %= include 'advertisement'
