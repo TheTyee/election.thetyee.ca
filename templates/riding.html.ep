@@ -116,6 +116,7 @@
                             <table class="table table-striped table-bordered">
                                 <caption>This year's candidates so far</caption>
                                 <tbody>
+                                    %# TODO Going to change to an array for $candidate data
                                     % for my $candidate ( sort keys $candidates ) {
                                     % my $can = $candidates->{ $candidate };
                                     <tr>
