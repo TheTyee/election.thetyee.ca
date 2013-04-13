@@ -285,6 +285,15 @@ sub _get_avg_from_gs {
 sub _get_candidate_stats {
     my	( $candidates, $parties )	= @_;
     my $stats = {};
+    for my $party ( keys $parties ) {
+        my $p = $parties->{ $party };
+                $stats->{ $p->{'slug'} } = {
+                    incumbents => 0,
+                    men        => 0,
+                    num        => 0,
+                    women      => 0,
+                }
+    }
     for my $can ( @$candidates ) {
         for my $party ( keys $parties ) {
             my $p = $parties->{ $party };

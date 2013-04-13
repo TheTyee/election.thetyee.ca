@@ -61,6 +61,9 @@
 % end
 
 % content_for sharing => begin
+                <a class="btn_google" target="_blank" href="https://plus.google.com/share?hl=en&url=http://election.thetyee.ca" title="Share on Google Plus"><img src="<%= $asset %>/ui/img/google-24x24.png" /></a>
+                <a class="btn_facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?t=BC%20Election%202013%20Map%20%26%20Guide%20--%20Full%20candidates%20listing%20%7C%20The%20Tyee&u=http://election.thetyee.ca/cadidates" title="Share on Facebook"><img src="<%= $asset %>/ui/img/facebook-24x24.png" /></a>
+                <a class="btn_twitter" target="_blank" href="http://twitter.com/share?text=BC%20Election%202013%20Map%20%26%20Guide%20--%20Full%20candidates%20listing%20via%20%40TheTyee%20%23bcpoli&url=http://election.thetyee.ca/candidates" title="Share on Twitter"><img src="<%= $asset %>/ui/img/twitter-24x24.png" /></a>
 % end
             <div id="sharing" class="row-fluid">
                 <%= content_for 'sharing' %>
@@ -85,32 +88,53 @@
             <div id="content" class="row-fluid">
                 <div id="content-main" class="span12">
                     <h1>BC Election 2013 Candidates</h1>
+                    <p>Welcome to The Tyee's list of candidates for the 2013 provincial election. It includes candidate emails, social media accounts, and other details as collected by our reporting team. We hope you'll use it to engage the contenders for your riding on issues that matter to you. While we update this list as often as possible, your participation is welcome. Please send updates or corrections <a href="http://www.google.com/recaptcha/mailhide/d?k=01mUCmm4B0TtUYLcDfyl8yqw==&c=DpDpCpqFpinNpOeUeUDc8C_lqrkfpjRKl_us2U6eNck=">here</a>. &mdash; The Tyee Team.</p>
                     <div id="quickstats" class="well">
-                        <h3>Quick stats on <%= scalar keys $candidates %> candidates</h3>
-                    <ul class="span3">
-                        <li>Incumbents seeking re-election: <%= $stats->{'incumbents'} %></li>
+                        % my $can_count = scalar keys $candidates;
+                        <h3>Quick stats on <%= $can_count %> candidates</h3>
+                    <ul id="chart-incumbents" class="span4 chartlist">
+                        <li>
+                        <i>Incumbents&nbsp;running: </i>
+                        <span class="count"><%= $stats->{'incumbents'} %></span>
+                            <span class="index" style="width: 100%">100%</span>
+                        </li>
                         % for my $party ( sort { $stats->{$b}{'incumbents'} <=> $stats->{$a}{'incumbents'} } keys $parties ) {
                         % my $p = $parties->{ $party };
                         % if ( $stats->{ $p->{'slug'} }{'incumbents'} ) {
-                        <li><%= $p->{'shortname'} %> incumbents: <%= $stats->{ $p->{'slug'} }{'incumbents'} %></li>  
+                        <li>
+                        <i><%= $p->{'shortname'} %> incumbents: </i>
+                        <span class="count"><%= $stats->{ $p->{'slug'} }{'incumbents'} %></span>  
+                        <span class="index" style="background: <%= $p->{'colour'} %>; width: <%= round( ( $stats->{ $p->{'slug'} }{'incumbents'} / $stats->{'incumbents'}, 2) ) * 100 %>%"><%= round( ( $stats->{ $p->{'slug'} }{'incumbents'} / $stats->{'incumbents'}, 2) ) * 100 %>%</span>
+                        </li>
                         %   }
                         % }
                     </ul>
-                    <ul class="span3">
+                    <ul id="chart-candidates" class="span5 chartlist">
                         % for my $party ( sort { $stats->{$b}{'num'} <=> $stats->{$a}{'num'} } keys $parties ) {
                         % my $p = $parties->{ $party };
-                        <li><%= $p->{'shortname'} %> candidates: <%= $stats->{ $p->{'slug'} }{'num'} %></li>  
+                        <li><i><%= $p->{'shortname'} %> candidates: </i>
+                        <span class="count"><%= $stats->{ $p->{'slug'} }{'num'} %></span>  
+                        <span class="index" style="background: <%= $p->{'colour'} %>; width: <%= round( ( $stats->{ $p->{'slug'} }{'num'} / 85, 2) ) * 100 %>%"><%= round( ( $stats->{ $p->{'slug'} }{'num'} / 85, 2) ) * 100 %>%</span>
+                        
+                        </li>  
                         % }
                     </ul>
-                    <ul class="span3">
-                        <li>Woman: <%= $stats->{'women'} %></li>
-                        <li>Men: <%= $stats->{'men'} %></li>
+                    <ul id="chart-gender" class="span2 chartlist">
+                        <li><i>Men: </i>
+                        <span class="count"><%= $stats->{'men'} %></span>  
+                        <span class="index" style="width: <%= round( ( $stats->{'men'} / $can_count, 2) ) * 100 %>%"><%= round( ( $stats->{'men'} / $can_count, 2) ) * 100 %>%</span>
+                        
+                        </li>
+                        <li><i>Women: </i>
+                        <span class="count"><%= $stats->{'women'} %></span>  
+                        <span class="index" style="width: <%= round( ( $stats->{'women'} / $can_count, 2) ) * 100 %>%"><%= round( ( $stats->{'women'} / $can_count, 2) ) * 100 %>%</span>
+                        </li>
                     </ul>
                     <br clear="all" />
                 </div>
 
                 <div id="candidates"> 
-                    <table id="candidates-table" class="table table-striped table-bordered tablesorter">
+                    <table id="candidates-table" class="table table-striped table-bordered tablesorter hidden-phone visible-tablet visible-desktop">
                         <caption>This year's candidates so far</caption>
                         <thead>
                             <tr>
@@ -148,6 +172,27 @@
                             % }
                         </tbody>
                     </table>
+                    <dl class="candidates visible-phone hidden-tablet hidden-desktop">
+                     % for my $can ( @$candidates ) {
+                        <dt>
+                        <%== $can->{'url'} ? '<a href="' . $can->{'url'} . '" ' . ' title="Web site for ' . $can->{'fullname'} . '" >' . $can->{'lastname'} . ', ' . $can->{'firstname'} . '</a>' : $can->{'lastname'} . ', ' . $can->{'firstname'} %>
+                          <span class="label label-<%= $can->{'partyslug'} %>" style="background-color: <%= $parties->{ $can->{'partyslug'} }{'colour'} %>; float: right;"><%== $parties->{ $can->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $can->{'partyslug'} }{'website'} . '">' . $parties->{ $can->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $can->{'partyslug'} }{'shortname'} %></span>
+                        </dt>
+                        % if ( $can->{'incumbent'} eq 'yes' ) {
+                        <dd class="incumbent">
+                            <span class="label label-incumbent">Incumbent</span>
+                        </dd>
+                        % }
+                        <dd class="social">
+                        <%== $can->{'twitter'} ? '<span class="can-twitter"><a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $can->{'twitter'} . '"><i class="icon-twitter-sign">&nbsp;</i></a></span>' : '' %>                              
+                            <%== $can->{'facebook'} ? '<span class="can-facebook"><a target="_blank" href="' . $can->{'facebook'} . '"><i class="icon-facebook-sign">&nbsp;</i></a></span>' : '' %>
+                            <%== $can->{'email'} ? '<span class="can-email"><a target="_blank" href="' . $can->{'email'} . '"><i class="icon-envelope-alt">&nbsp;</i></a></span>' : '' %>
+                        </dd>
+                        <dd class="riding">
+                              <a href="/riding/<%= $can->{'slug'} %>" title="Find out more about <%= $can->{'riding'} %> Riding: BC Conservative, BC Green, BC Liberal, BC NDP &amp; Independent Candidates."><%= $can->{'riding'} %></a>
+                        </dd>
+                        % }
+                        </dl>
                 </div>
                 <br clear="all" />
             <div id="reader-involvement" class="alert alert-warning">
@@ -160,6 +205,3 @@
             </div>
         </div><!-- /.span8 -->
     </div> <!-- /.row-fluid -->   
-    <pre>
-    %= dumper( $rows, $stats, $party_lookup, $parties, $candidates );
-    </pre>
