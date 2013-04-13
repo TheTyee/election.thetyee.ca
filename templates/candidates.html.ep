@@ -109,7 +109,7 @@
                         %   }
                         % }
                     </ul>
-                    <ul id="chart-candidates" class="span5 chartlist">
+                    <ul id="chart-candidates" class="span6 chartlist">
                         % for my $party ( sort { $stats->{$b}{'num'} <=> $stats->{$a}{'num'} } keys $parties ) {
                         % my $p = $parties->{ $party };
                         <li><i><%= $p->{'shortname'} %> candidates: </i>
@@ -176,7 +176,7 @@
                      % for my $can ( @$candidates ) {
                         <dt>
                         <%== $can->{'url'} ? '<a href="' . $can->{'url'} . '" ' . ' title="Web site for ' . $can->{'fullname'} . '" >' . $can->{'lastname'} . ', ' . $can->{'firstname'} . '</a>' : $can->{'lastname'} . ', ' . $can->{'firstname'} %>
-                          <span class="label label-<%= $can->{'partyslug'} %>" style="background-color: <%= $parties->{ $can->{'partyslug'} }{'colour'} %>; float: right;"><%== $parties->{ $can->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $can->{'partyslug'} }{'website'} . '">' . $parties->{ $can->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $can->{'partyslug'} }{'shortname'} %></span>
+                          <span class="label label-<%= $can->{'partyslug'} %>" style="background-color: <%= $parties->{ $can->{'partyslug'} }{'colour'} %>; float: right; margin-top: 4px;"><%== $parties->{ $can->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $can->{'partyslug'} }{'website'} . '">' . $parties->{ $can->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $can->{'partyslug'} }{'shortname'} %></span>
                         </dt>
                         % if ( $can->{'incumbent'} eq 'yes' ) {
                         <dd class="incumbent">
