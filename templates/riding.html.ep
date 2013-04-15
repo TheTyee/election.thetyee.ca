@@ -165,6 +165,7 @@
                         <h3>Did you know?</h3>
                         <%== markdown( $riding->{'did-you-know'} ) %>
                     </div>
+                    <%== $poll %>
                     <div id="previous-results">
                         <h3>Previous Election Results</h3>
                         %# Did we have a by-election? If so, show the table
