@@ -128,8 +128,8 @@
                                     <tr>
                                         <th>
                                             <%== $can->{'url'} ? '<a href="' . $can->{'url'} . '" ' . ' title="Web site for ' . $can->{'fullname'} . '" >' . $can->{'fullname'} . '</a>' : $can->{'fullname'} %>&nbsp;<span class="label label-<%= $can->{'partyslug'} %>" style="background-color: <%= $parties->{ $can->{'partyslug'} }{'colour'} %>;"><%== $parties->{ $can->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $can->{'partyslug'} }{'website'} . '">' . $parties->{ $can->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $can->{'partyslug'} }{'shortname'} %></span><br />
-                                           <%== $can->{'twitter'} ? '<span class="can-twitter"><a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $can->{'twitter'} . '"><i class="icon-twitter-sign">&nbsp;</i></a></span>' : '' %>
-                                           <%== $can->{'facebook'} ? '<span class="can-facebook"><a target="_blank" href="' . $can->{'facebook'} . '"><i class="icon-facebook-sign">&nbsp;</i></a></span></a></span>' : '' %><%== $can->{'email'} ? '<span class="can-email"><a href="mailto:' . $can->{'email'} . '"><i class="icon-envelope-alt">&nbsp;</i></a></span>' : '' %>
+                                           <%== $can->{'twitter'} ? '<span class="can-twitter"><a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $can->{'twitter'} . '"><i class="icon-twitter-sign">&nbsp;</i></a></span>' : '' %><%== $can->{'facebook'} ? '<span class="can-facebook"><a target="_blank" href="' . $can->{'facebook'} . '"><i class="icon-facebook-sign">&nbsp;</i></a></span>' : '' %><%== $can->{'email'} ? '<span class="can-email"><a href="mailto:' . $can->{'email'} . '"><i class="icon-envelope-alt">&nbsp;</i></a></span>' : '' %>
+
 
                                             
                                        </th>
