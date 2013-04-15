@@ -10,7 +10,6 @@
 <meta name="keywords" content="BC Election 2013 Map and Guide, British Columbia, Green Party of BC, Liberal Party of BC, BC NDP, Conservative Party of BC">
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://election.thetyee.ca/candidates/" />
-<link rel="stylesheet" href="<%= $asset %>/ui/css/font-awesome.min.css">
 % end
 
 % content_for javascript => begin
@@ -88,9 +87,9 @@
             <div id="content" class="row-fluid">
                 <div id="content-main" class="span12">
                     <ul class="topnav nav nav-pills">
-                      <li><a href="/">Home</a></li>
-                      <li class="active"><a href="/candidates">Candidates</a></li>
-                      <li><a href="http://thetyee.ca/News/2013/04/09/BC-Election-Ridings-to-Watch/">Hot Ridings</a></li>
+                      <li><a title="BC Election 2013 Map and Guide | Your riding-by-riding source for election issues and action"href="/">Home</a></li>
+                      <li class="active"><a title="BC Election 2013 Candidates" href="/candidates">Candidates</a></li>
+                      <li><a title="Top 10 Ridings to Watch: Swings, high profile contenders, and where BC history could be made." href="http://thetyee.ca/News/2013/04/09/BC-Election-Ridings-to-Watch/">Hot Ridings</a></li>
                     </ul>
                     <hr class="nav-sep" />
                     <h1>BC Election 2013 Candidates</h1>
@@ -160,7 +159,7 @@
                                     <span style="float:right;margin-right: 20px;">
                                         <%== $can->{'twitter'} ? '<span class="can-twitter"><a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $can->{'twitter'} . '"><i class="icon-twitter-sign">&nbsp;</i></a></span>' : '' %>                              
                                 <%== $can->{'facebook'} ? '<span class="can-facebook"><a target="_blank" href="' . $can->{'facebook'} . '"><i class="icon-facebook-sign">&nbsp;</i></a></span>' : '' %>
-                                <%== $can->{'email'} ? '<span class="can-email"><a target="_blank" href="mailto:' . $can->{'email'} . '"><i class="icon-envelope-alt">&nbsp;</i></a></span>' : '' %>
+                                <%== $can->{'email'} ? '<span class="can-email"><a href="mailto:' . $can->{'email'} . '"><i class="icon-envelope-alt">&nbsp;</i></a></span>' : '' %>
                                     </span>
                                 </td>
                                  <td width="200">
@@ -192,7 +191,7 @@
                         <dd class="social">
                         <%== $can->{'twitter'} ? '<span class="can-twitter"><a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $can->{'twitter'} . '"><i class="icon-twitter-sign">&nbsp;</i></a></span>' : '' %>                              
                             <%== $can->{'facebook'} ? '<span class="can-facebook"><a target="_blank" href="' . $can->{'facebook'} . '"><i class="icon-facebook-sign">&nbsp;</i></a></span>' : '' %>
-                            <%== $can->{'email'} ? '<span class="can-email"><a target="_blank" href="mailto:' . $can->{'email'} . '"><i class="icon-envelope-alt">&nbsp;</i></a></span>' : '' %>
+                            <%== $can->{'email'} ? '<span class="can-email"><a href="mailto:' . $can->{'email'} . '"><i class="icon-envelope-alt">&nbsp;</i></a></span>' : '' %>
                         </dd>
                         <dd class="riding">
                               <a href="/riding/<%= $can->{'slug'} %>" title="Find out more about <%= $can->{'riding'} %> Riding: BC Conservative, BC Green, BC Liberal, BC NDP &amp; Independent Candidates."><%= $can->{'riding'} %></a>

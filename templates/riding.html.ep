@@ -103,9 +103,9 @@
             <div id="content" class="row-fluid">
                 <div id="content-main" class="span8">
                     <ul class="topnav nav nav-pills">
-                      <li><a href="/">Home</a></li>
-                      <li><a href="/candidates">Candidates</a></li>
-                      <li><a href="http://thetyee.ca/News/2013/04/09/BC-Election-Ridings-to-Watch/">Hot Ridings</a></li>
+                      <li><a title="BC Election 2013 Map and Guide | Your riding-by-riding source for election issues and action"href="/">Home</a></li>
+                      <li><a title="BC Election 2013 Candidates" href="/candidates">Candidates</a></li>
+                      <li><a title="Top 10 Ridings to Watch: Swings, high profile contenders, and where BC history could be made." href="http://thetyee.ca/News/2013/04/09/BC-Election-Ridings-to-Watch/">Hot Ridings</a></li>
                     </ul>
                     <hr class="nav-sep" />
                     <h1><%= $riding->{'riding'} %></h1>
@@ -128,8 +128,9 @@
                                     <tr>
                                         <th>
                                             <%== $can->{'url'} ? '<a href="' . $can->{'url'} . '" ' . ' title="Web site for ' . $can->{'fullname'} . '" >' . $can->{'fullname'} . '</a>' : $can->{'fullname'} %>&nbsp;<span class="label label-<%= $can->{'partyslug'} %>" style="background-color: <%= $parties->{ $can->{'partyslug'} }{'colour'} %>;"><%== $parties->{ $can->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $can->{'partyslug'} }{'website'} . '">' . $parties->{ $can->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $can->{'partyslug'} }{'shortname'} %></span><br />
-                                           <%== $can->{'twitter'} ? '<span class="can-twitter"><a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $can->{'twitter'} . '">@' . $can->{'twitter'} . '</a></span><br />' : '' %>
-                                           <%== $can->{'facebook'} ? '<span class="can-facebook"><a target="_blank" href="' . $can->{'facebook'} . '">facebook</a></span><br />' : '' %>
+                                           <%== $can->{'twitter'} ? '<span class="can-twitter"><a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $can->{'twitter'} . '"><i class="icon-twitter-sign">&nbsp;</i></a></span>' : '' %>
+                                           <%== $can->{'facebook'} ? '<span class="can-facebook"><a target="_blank" href="' . $can->{'facebook'} . '"><i class="icon-facebook-sign">&nbsp;</i></a></span></a></span>' : '' %><%== $can->{'email'} ? '<span class="can-email"><a href="mailto:' . $can->{'email'} . '"><i class="icon-envelope-alt">&nbsp;</i></a></span>' : '' %>
+
                                             
                                        </th>
                                     </tr>
