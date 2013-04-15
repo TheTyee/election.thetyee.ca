@@ -40,9 +40,9 @@
             <div id="content" class="row-fluid">
                 <div id="content-main" class="span8">
                     <ul class="topnav nav nav-pills">
-                      <li class="active"><a href="/">Home</a></li>
-                      <li><a href="/candidates">Candidates</a></li>
-                      <li><a href="http://thetyee.ca/News/2013/04/09/BC-Election-Ridings-to-Watch/">Hot Ridings</a></li>
+                      <li class="active" ><a title="BC Election 2013 Map and Guide | Your riding-by-riding source for election issues and action" href="/">Home</a></li>
+                      <li><a title="BC Election 2013 Candidates" href="/candidates">Candidates</a></li>
+                      <li><a title="Top 10 Ridings to Watch: Swings, high profile contenders, and where BC history could be made." href="http://thetyee.ca/News/2013/04/09/BC-Election-Ridings-to-Watch/">Hot Ridings</a></li>
                     </ul>
                     <hr class="nav-sep" />
                     <div class="well visible-phone riding-search-mobile">
