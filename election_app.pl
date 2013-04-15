@@ -64,7 +64,7 @@ get '/riding/:name' => sub {
         return $self->render_not_found
             unless $riding;
 
-        $cache->set( $name, $riding, "5 minutes" );
+        $cache->set( $name, $riding, "30 minutes" );
         $cache_status = 'fetched';
     }
     $self->app->log->debug( "Cache status was: $cache_status" );
@@ -75,7 +75,7 @@ get '/riding/:name' => sub {
     my $avg          = $cache->get( $avg_row_name );
     if ( !defined $avg ) {
         $avg = _get_avg_from_gs( $avg_row_name );
-        $cache->set( $avg_row_name, $avg, "240 minutes" );
+        $cache->set( $avg_row_name, $avg, "24 hours" );
     }
 
     # TODO First most to sub, then...
@@ -94,7 +94,7 @@ get '/riding/:name' => sub {
         if ( $rep_data->{'party_name'} eq 'New Democratic Party of BC' ) {
             $rep_data->{'party_name'} = 'BC New Democratic Party';
         }
-        $cache->set( $name . '-incumbent', $rep_data, "240 minutes" );
+        $cache->set( $name . '-incumbent', $rep_data, "24 hours" );
     }
 
     # TODO this should probably get migrated to a Class
@@ -259,7 +259,7 @@ sub _get_candidates {
             $candidate->content->{'twitter'} =~ s/@//g;
             push @$candidates, $candidate->content;
         }
-        $cache->set( 'candidates', $candidates, "15 minutes" );
+        $cache->set( 'candidates', $candidates, "30 minutes" );
         $cache_status = 'fetched';
     }
     return $candidates, $cache_status;
