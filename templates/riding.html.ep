@@ -102,6 +102,12 @@
             </div>
             <div id="content" class="row-fluid">
                 <div id="content-main" class="span8">
+                    <ul class="topnav nav nav-pills">
+                      <li><a href="/">Home</a></li>
+                      <li><a href="/candidates">Candidates</a></li>
+                      <li><a href="http://thetyee.ca/News/2013/04/09/BC-Election-Ridings-to-Watch/">Hot Ridings</a></li>
+                    </ul>
+                    <hr class="nav-sep" />
                     <h1><%= $riding->{'riding'} %></h1>
                     % if ( $riding->{'dek'} ) { 
                     <h2 class="dek"><%= $riding->{'dek'} %></h2>

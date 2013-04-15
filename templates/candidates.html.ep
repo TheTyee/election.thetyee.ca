@@ -87,6 +87,12 @@
             </div>
             <div id="content" class="row-fluid">
                 <div id="content-main" class="span12">
+                    <ul class="topnav nav nav-pills">
+                      <li><a href="/">Home</a></li>
+                      <li class="active"><a href="/candidates">Candidates</a></li>
+                      <li><a href="http://thetyee.ca/News/2013/04/09/BC-Election-Ridings-to-Watch/">Hot Ridings</a></li>
+                    </ul>
+                    <hr class="nav-sep" />
                     <h1>BC Election 2013 Candidates</h1>
                     <p>Welcome to The Tyee's list of candidates for the 2013 provincial election. It includes candidate emails, social media accounts, and other details as collected by our reporting team. We hope you'll use it to engage the contenders for your riding on issues that matter to you. While we update this list as often as possible, your participation is welcome. Please send updates or corrections <a href="http://www.google.com/recaptcha/mailhide/d?k=01mUCmm4B0TtUYLcDfyl8yqw==&c=DpDpCpqFpinNpOeUeUDc8C_lqrkfpjRKl_us2U6eNck=">here</a>. &mdash; The Tyee Team.</p>
                     <div id="quickstats" class="well">
