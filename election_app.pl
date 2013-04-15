@@ -244,7 +244,8 @@ sub _get_candidates_from_gs {
 }
 
 sub _get_candidates {
-    my $candidates   = $cache->get( 'candidates' );
+    #my $candidates   = $cache->get( 'candidates' );
+    my $candidates;
     my $cache_status = 'cached';
     if ( !defined $candidates ) {
 
@@ -261,6 +262,8 @@ sub _get_candidates {
             $candidate->content->{'twitter'} =~ s/@//g;
             push @$candidates, $candidate->content;
         }
+        #TODO sort candidates
+        @$candidates = sort { $a->{'riding'} cmp $b->{'riding'} } @$candidates;
         $cache->set( 'candidates', $candidates, "30 minutes" );
         $cache_status = 'fetched';
     }
@@ -344,6 +347,8 @@ sub _get_candidate_stats {
 
 sub _get_poll {
     my $poll_html  = $ua->get( $config->{'remote_inc_path'} . '/Polls/include.php' )->res->body;
+    # TODO make sure there's no error
+    # TODO cache this!
     return $poll_html;
 }
 
