@@ -139,7 +139,7 @@
                             </table>
                         </div>
                         <div id="incumbent" class="span6"> 
-                            <h3>Incumbent</h3>
+                            <h3>Current MLA</h3>
                             % if ( $rep_data ) {
                             % my $party = $rep_data->{'party_name'};
                             % $party   = lc( $party );
@@ -148,7 +148,7 @@
                             <%= $rep_data->{'name'} %>" width="70" height="93" />
                             <strong><%= $rep_data->{'name'} %></strong>&nbsp;<span class="label label-<%= $party %>" style="background-color: <%= $parties->{ $party }{'colour'} %>;"><a href="<%= $parties->{ $party }{'website'} %>"><%= $parties->{ $party }{'shortname'} %></a></span>
                             <br>
-                            <a href="mailto:<%= $rep_data->{'email'} %>">E-mail address</a><br><a target="_blank" href="<%= $rep_data->{'url'} %>">Official web page</a>
+                            <a target="_blank" href="<%= $rep_data->{'url'} %>">MLA web page</a>
                             </p>
                             % } else {
                             <p class="alert alert-error">Unable to retrieve the representative information for this riding.</p>
