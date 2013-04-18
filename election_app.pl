@@ -35,6 +35,7 @@ get '/' => sub {
         $cache->set( 'hook_posts', $hook_posts, "5 minutes" );
     }
     my $poll = _get_poll();
+
     # Stash the data that we'll use in the index template
     $self->stash(
         hook_posts => $hook_posts,
@@ -100,11 +101,12 @@ get '/riding/:name' => sub {
 
     # TODO this should probably get migrated to a Class
     my $parties      = _get_parties_from_gs();
-    my $party_lookup = _get_party_lookup( $parties ); 
+    my $party_lookup = _get_party_lookup( $parties );
+
     # New approach to getting candidate data from GS
     my $candidates      = _get_candidates_from_gs( $name );
     my $candidate_names = _get_candidate_names( $candidates );
-    my $poll = _get_poll();
+    my $poll            = _get_poll();
 
     # Stash the data from the spreadsheet for use in the template
     $self->stash(
@@ -244,6 +246,7 @@ sub _get_candidates_from_gs {
 }
 
 sub _get_candidates {
+
     #my $candidates   = $cache->get( 'candidates' );
     my $candidates;
     my $cache_status = 'cached';
@@ -256,14 +259,16 @@ sub _get_candidates {
         # Find the main worksheet by title
         my $worksheet = $spreadsheet->worksheet(
             { title => $config->{'worksheet_name_candidates'}, } );
-        my @rows       = $worksheet->rows;
+        my @rows = $worksheet->rows;
         $candidates = [];
         for my $candidate ( @rows ) {
             $candidate->content->{'twitter'} =~ s/@//g;
             push @$candidates, $candidate->content;
         }
+
         #TODO sort candidates
-        @$candidates = sort { $a->{'riding'} cmp $b->{'riding'} } @$candidates;
+        @$candidates
+            = sort { $a->{'riding'} cmp $b->{'riding'} } @$candidates;
         $cache->set( 'candidates', $candidates, "30 minutes" );
         $cache_status = 'fetched';
     }
@@ -346,7 +351,10 @@ sub _get_candidate_stats {
 }    ## --- end sub _get_candidates
 
 sub _get_poll {
-    my $poll_html  = $ua->get( $config->{'remote_inc_path'} . '/Polls/include.php' )->res->body;
+    my $poll_html
+        = $ua->get( $config->{'remote_inc_path'} . '/Polls/include.php' )
+        ->res->body;
+
     # TODO make sure there's no error
     # TODO cache this!
     return $poll_html;
