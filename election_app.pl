@@ -403,7 +403,7 @@ sub _get_riding_call_stats {
     my $stats = {};
     for my $r ( @$ridings ) {
         for ( $r->{'call'} ) {
-            when ( /To close to call/ ) { 
+            when ( /Too close to call/ ) { 
                 $stats->{'ridings'}{'tooclose'}++;
             }
             when ( /Likely/ ) { 
