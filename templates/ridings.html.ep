@@ -175,7 +175,23 @@
                             % }
                         </tbody>
                     </table>
+                    <dl class="ridings visible-phone hidden-tablet hidden-desktop">
+                    % for my $r ( @$ridings ) {
+                        <dt>
+                            <strong>
+                                <a href="/riding/<%= $r->{'slug'} %>" title="Find out more about <%= $r->{'name'} %> Riding: BC Conservative, BC Green, BC Liberal, BC NDP &amp; Independent Candidates."><%= $r->{'name'} %></a>
+                            </strong>
+                        </dt>
+                        <dd><%= $r->{'call'} %></dd>
+                        <dd>
+                        % if ( $r->{'party'} ) {
+                        <span class="label label-<%= $r->{'partyslug'} %>" style="background-color: <%= $parties->{ $r->{'partyslug'} }{'colour'} %>;"><%== $parties->{ $r->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $r->{'partyslug'} }{'website'} . '">' . $parties->{ $r->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $r->{'partyslug'} }{'shortname'} %></span>
+                        % }
+                        </dd>
+                  % }
+                 </dl>
             </div>
+            <br clear="all" />
             <div id="reader-involvement" class="alert alert-warning">
                 <p>
                 Help us make these riding pages richer. Email your big issues, story ideas or scuttlebutt <a href="http://www.google.com/recaptcha/mailhide/d?k=01mUCmm4B0TtUYLcDfyl8yqw==&c=DpDpCpqFpinNpOeUeUDc8C_lqrkfpjRKl_us2U6eNck=">here</a>.

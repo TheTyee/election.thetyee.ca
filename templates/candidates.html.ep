@@ -197,7 +197,7 @@
                               <a href="/riding/<%= $can->{'slug'} %>" title="Find out more about <%= $can->{'riding'} %> Riding: BC Conservative, BC Green, BC Liberal, BC NDP &amp; Independent Candidates."><%= $can->{'riding'} %></a>
                         </dd>
                         % }
-                        </dl>
+                     </dl>
                 </div>
                 <br clear="all" />
             <div id="reader-involvement" class="alert alert-warning">
