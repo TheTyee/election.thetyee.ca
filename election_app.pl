@@ -127,7 +127,7 @@ get '/riding/:name' => sub {
     $self->render( 'riding' );
 };
 
-# Route requests to /
+# Route requests to /candidates
 get '/candidates' => sub {
     my $self = shift;
 
@@ -151,6 +151,28 @@ get '/candidates' => sub {
     $self->render( 'candidates' );
 };
 
+# Route requests to /ridings
+get '/ridings' => sub {
+    my $self = shift;
+
+    my ( $ridings, $cache_status ) = _get_riding_calls();
+    $self->app->log->debug( "Cache status was: $cache_status" );
+    my $parties      = _get_parties_from_gs();
+    my $party_lookup = _get_party_lookup( $parties );
+    my $stats        = _get_riding_call_stats ( $ridings, $parties );
+    # Stash the data that we'll use in the index template
+    $self->stash(
+        ridings      => $ridings,
+        cache_status => $cache_status,
+        asset        => $config->{'static_asset_path'},
+        parties      => $parties,
+        party_lookup => $party_lookup,
+        stats        => $stats,
+    );
+
+    # Render the index.html.ep template
+    $self->render( 'ridings' );
+};
 ########################################################################
 # Sub-routines
 ########################################################################
@@ -266,13 +288,39 @@ sub _get_candidates {
             push @$candidates, $candidate->content;
         }
 
-        #TODO sort candidates
         @$candidates
             = sort { $a->{'riding'} cmp $b->{'riding'} } @$candidates;
         $cache->set( 'candidates', $candidates, "30 minutes" );
         $cache_status = 'fetched';
     }
     return $candidates, $cache_status;
+}
+
+sub _get_riding_calls {
+
+    my $ridings;
+    my $cache_status = 'cached';
+    if ( !defined $ridings ) {
+
+        # Find the spreadsheet by key
+        my $spreadsheet = $service->spreadsheet(
+            { key => $config->{'spreadsheet_key'}, } );
+
+        # Find the main worksheet by title
+        my $worksheet = $spreadsheet->worksheet(
+            { title => $config->{'worksheet_name_ridings'}, } );
+        my @rows = $worksheet->rows;
+        $ridings = [];
+        for my $riding ( @rows ) {
+            push @$ridings, $riding->content;
+        }
+
+        @$ridings
+            = sort { $a->{'key'} cmp $b->{'key'} } @$ridings;
+        $cache->set( 'ridings', $ridings, "30 minutes" );
+        $cache_status = 'fetched';
+    }
+    return $ridings, $cache_status;
 }
 
 sub _get_candidate_names {
@@ -349,6 +397,29 @@ sub _get_candidate_stats {
     }
     return $stats;
 }    ## --- end sub _get_candidates
+
+sub _get_riding_call_stats {
+    my ( $ridings, $parties ) = @_;
+    my $stats = {};
+    for my $r ( @$ridings ) {
+        for ( $r->{'call'} ) {
+            when ( /To close to call/ ) { 
+                $stats->{'ridings'}{'tooclose'}++;
+            }
+            when ( /Likely/ ) { 
+                $stats->{'ridings'}{'likely'}++;
+                $stats->{'parties'}{ $r->{'partyslug'} }{'likely'}++;
+                $stats->{'parties'}{ $r->{'partyslug'} }{'total'}++;
+            }
+            when ( /Definitely/) { 
+                $stats->{'ridings'}{'definitely'}++;
+                $stats->{'parties'}{ $r->{'partyslug'} }{'definitely'}++;
+                $stats->{'parties'}{ $r->{'partyslug'} }{'total'}++;
+            }
+        }
+    }
+    return $stats;
+}
 
 sub _get_poll {
     my $poll_html
