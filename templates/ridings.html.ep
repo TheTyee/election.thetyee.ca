@@ -1,6 +1,6 @@
 % layout 'default',
 % body_class => 'ridings',
-% title => 'BC Election 2013 Ridings';
+% title => "The Tyee's BC Election 2013 Riding Forecasts";
 % use Text::Markdown 'markdown';
 % use Number::Format qw(:subs);
 
@@ -92,8 +92,12 @@
                       <li class="active"><a title="Ridings to Watch: Swings, high profile contenders, and where BC history could be made." href="/ridings">Ridings</a></li>
                     </ul>
                     <hr class="nav-sep" />
-                    <h1>BC Election 2013 Ridings</h1>
-                    <p>Please send updates or corrections <a href="http://www.google.com/recaptcha/mailhide/d?k=01mUCmm4B0TtUYLcDfyl8yqw==&c=DpDpCpqFpinNpOeUeUDc8C_lqrkfpjRKl_us2U6eNck=">here</a>. &mdash; The Tyee Team.</p>
+                    <h1>The Tyee's BC Election 2013 Riding Forecasts</h1>
+                    <p>We have analyzed the polls, mulled over elections past, and peered into our crystal ball to bring you our predictions for which candidates will win which ridings.
+                    </p>
+                    <p>These calls are divided up into likely wins and definite wins, with some ridings deemed too close to call.</p>
+                    <p>These predictions are by no means set in stone. We fully expect them to change as the campaign season rolls on and we hope you, our readers, will provide insight from your own ridings across the province. Email feedback <a href="http://www.google.com/recaptcha/mailhide/d?k=01mUCmm4B0TtUYLcDfyl8yqw==&c=DpDpCpqFpinNpOeUeUDc8C_lqrkfpjRKl_us2U6eNck=">here</a>.
+                    </p>
                     <div id="quickstats" class="well">
                         <h3>Quick stats on The Tyee's BC Election 2013 calls</h3>
                         <p>The Tyee has called <b><%= $stats->{'ridings'}{'definitely'} %> ridings "Definitely,"</b> <b><%= $stats->{'ridings'}{'likely'} %> ridings "Likely,"</b> and there are <b><%= $stats->{'ridings'}{'tooclose'} %> ridings that are still "Too close to call."</b></p>
@@ -107,6 +111,11 @@
                             <span class="index" style="background: <%= $parties->{ $p }{'colour'} %>; width: <%= round( ( $stats->{'parties'}{ $p }{'total'} / 85, 2) ) * 100 %>%"><%= round( ( $stats->{'parties'}{ $p }{'total'} / 85, 2) ) * 100 %>%</span> 
                             </li>
                         % }
+                            <li>
+                            <i>Too close to call: </i>
+                            <span class="count"><%= $stats->{'ridings'}{'tooclose'} %></span>  
+                            <span class="index" style="width: <%= round( ( $stats->{'ridings'}{'tooclose'} / 85, 2) ) * 100 %>%"><%= round( ( $stats->{'ridings'}{'tooclose'} / 85, 2) ) * 100 %>%</span> 
+                            </li>
                         </ul>
                         <ul id="chart-call-by-party-def" class="span4 chartlist">
                         <h4>Called Definitely</h4>

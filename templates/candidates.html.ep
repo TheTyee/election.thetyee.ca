@@ -120,8 +120,8 @@
                         <li><i><%= $p->{'shortname'} %> candidates: </i>
                         <span class="count"><%= $stats->{ $p->{'slug'} }{'num'} %></span>  
                         <span class="index" style="background: <%= $p->{'colour'} %><%= $p->{'colour'} %>; width: <%= round( ( $stats->{ $p->{'slug'} }{'num'} / 85, 2) ) * 100 %>%"><%= round( ( $stats->{ $p->{'slug'} }{'num'} / 85, 2) ) * 100 %>%</span>
-                        
                         </li>  
+
                         % }
                     </ul>
                     <ul id="chart-gender" class="span2 chartlist">
