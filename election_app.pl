@@ -106,6 +106,7 @@ get '/riding/:name' => sub {
     # New approach to getting candidate data from GS
     my $candidates      = _get_candidates_from_gs( $name );
     my $candidate_names = _get_candidate_names( $candidates );
+    my ( $riding_calls, $riding_cache_status ) = _get_riding_calls( $name );
     my $poll            = _get_poll();
 
     # Stash the data from the spreadsheet for use in the template
@@ -121,6 +122,7 @@ get '/riding/:name' => sub {
         party_lookup    => $party_lookup,
         candidates      => $candidates,
         poll            => $poll,
+        call    => $riding_calls,
     );
 
     # Render the riding.html.ep template
@@ -269,8 +271,7 @@ sub _get_candidates_from_gs {
 
 sub _get_candidates {
 
-    #my $candidates   = $cache->get( 'candidates' );
-    my $candidates;
+    my $candidates   = $cache->get( 'candidates' );
     my $cache_status = 'cached';
     if ( !defined $candidates ) {
 
@@ -297,8 +298,9 @@ sub _get_candidates {
 }
 
 sub _get_riding_calls {
-
-    my $ridings;
+    my ( $name ) = @_;
+    my $cachename = $name ? "$name-calls" : 'ridings';
+    my $ridings = $cache->get( $cachename );
     my $cache_status = 'cached';
     if ( !defined $ridings ) {
 
@@ -309,15 +311,20 @@ sub _get_riding_calls {
         # Find the main worksheet by title
         my $worksheet = $spreadsheet->worksheet(
             { title => $config->{'worksheet_name_ridings'}, } );
-        my @rows = $worksheet->rows;
+        my @rows;
+        if ( $name ) {    # Get only the rows matching the riding name
+            @rows = $worksheet->rows( { sq => 'slug = "' . $name . '"' } );
+        }
+        else {            # Get all the rows / candidates
+            @rows = $worksheet->rows;
+        }
         $ridings = [];
         for my $riding ( @rows ) {
             push @$ridings, $riding->content;
         }
-
         @$ridings
             = sort { $a->{'key'} cmp $b->{'key'} } @$ridings;
-        $cache->set( 'ridings', $ridings, "30 minutes" );
+        $cache->set( $cachename, $ridings, "30 minutes" );
         $cache_status = 'fetched';
     }
     return $ridings, $cache_status;
