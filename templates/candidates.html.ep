@@ -89,7 +89,7 @@
                     <ul class="topnav nav nav-pills">
                       <li><a title="BC Election 2013 Map and Guide | Your riding-by-riding source for election issues and action"href="/">Home</a></li>
                       <li class="active"><a title="BC Election 2013 Candidates" href="/candidates">Candidates</a></li>
-                      <li><a title="Top 10 Ridings to Watch: Swings, high profile contenders, and where BC history could be made." href="http://thetyee.ca/News/2013/04/09/BC-Election-Ridings-to-Watch/">Hot Ridings</a></li>
+                      <li><a title="Ridings to Watch: Swings, high profile contenders, and where BC history could be made." href="/ridings">Forecasts</a></li>
                     </ul>
                     <hr class="nav-sep" />
                     <h1>BC Election 2013 Candidates</h1>
@@ -120,8 +120,8 @@
                         <li><i><%= $p->{'shortname'} %> candidates: </i>
                         <span class="count"><%= $stats->{ $p->{'slug'} }{'num'} %></span>  
                         <span class="index" style="background: <%= $p->{'colour'} %>; width: <%= round( ( $stats->{ $p->{'slug'} }{'num'} / 85, 2) ) * 100 %>%"><%= round( ( $stats->{ $p->{'slug'} }{'num'} / 85, 2) ) * 100 %>%</span>
-                        
                         </li>  
+
                         % }
                     </ul>
                     <ul id="chart-gender" class="span2 chartlist">
@@ -197,7 +197,7 @@
                               <a href="/riding/<%= $can->{'slug'} %>" title="Find out more about <%= $can->{'riding'} %> Riding: BC Conservative, BC Green, BC Liberal, BC NDP &amp; Independent Candidates."><%= $can->{'riding'} %></a>
                         </dd>
                         % }
-                        </dl>
+                     </dl>
                 </div>
                 <br clear="all" />
             <div id="reader-involvement" class="alert alert-warning">
