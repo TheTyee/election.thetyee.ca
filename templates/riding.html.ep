@@ -114,7 +114,7 @@
                     % }
                     <div id="tyeecall" class="alert alert-warning">
                     % my $call = @$call[0];
-                    <i class="icon-exclamation-sign"></i>&nbsp;<strong>Tyee call:</strong> <%= $call->{'call'} %><%= $call->{'party'} ? ', ' . $call->{'party'} : '' %>. <%== $call->{'reasoning'} %>
+                    <i class="icon-exclamation-sign"></i>&nbsp;<strong>Tyee call:</strong> <%= $call->{'call'} %><%= $call->{'party'} ? ' ' . $call->{'party'} : '' %>. <%== $call->{'reasoning'} %>
                     </div>
                     <div id="race" class="row-fluid">
                         <div id="candidates" class="span6"> 
