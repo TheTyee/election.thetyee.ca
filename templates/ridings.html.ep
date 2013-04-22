@@ -1,0 +1,204 @@
+% layout 'default',
+% body_class => 'ridings',
+% title => "The Tyee's BC Election 2013 Riding Forecasts";
+% use Text::Markdown 'markdown';
+% use Number::Format qw(:subs);
+
+% content_for header => begin
+<meta name="chi-cache" value="<%= $cache_status %>" />
+<meta name="description" content="<%= title %> | BC Election 2013 Map and Guide - The Tyee">
+<meta name="keywords" content="BC Election 2013 Map and Guide, British Columbia, Green Party of BC, Liberal Party of BC, BC NDP, Conservative Party of BC">
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://election.thetyee.ca/ridings/" />
+% end
+
+% content_for javascript => begin
+        <link rel="stylesheet" href="<%= $asset %>/ui/js/theme.bootstrap.css">
+        <script src="<%= $asset %>/ui/js/jquery.tablesorter.min.js"></script>
+        <script src="<%= $asset %>/ui/js/jquery.tablesorter.widgets.js"></script>
+        <script>
+        $(function(){
+              $.extend($.tablesorter.themes.bootstrap, {
+                // these classes are added to the table. To see other table classes available,
+                // look here: http://twitter.github.com/bootstrap/base-css.html#tables
+                table      : 'table table-bordered',
+                header     : 'bootstrap-header', // give the header a gradient background
+                footerRow  : '',
+                footerCells: '',
+                icons      : '', // add "icon-white" to make them white; this icon class is added to the <i> in the header
+                sortNone   : 'bootstrap-icon-unsorted',
+                sortAsc    : 'icon-chevron-up',
+                sortDesc   : 'icon-chevron-down',
+                active     : '', // applied when column is sorted
+                hover      : '', // use custom css here - bootstrap class may not override it
+                filterRow  : '', // filter row class
+                even       : '', // odd row zebra striping
+                odd        : ''  // even row zebra striping
+              });
+            $("#ridings-table").tablesorter({
+		theme : "bootstrap",
+		widthFixed: true,
+		headerTemplate : '{content} {icon}', // new in v2.7. Needed to add the bootstrap icon!
+		// widget code contained in the jquery.tablesorter.widgets.js file
+		// use the zebra stripe widget if you plan on hiding any rows (filter widget)
+		widgets : [ "uitheme", "filter", "zebra" ],
+		widgetOptions : {
+			// reset filters button
+			filter_reset : ".reset"
+		}
+	      })
+            });
+        </script>
+% end
+
+% content_for footer_nav => begin
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="/" title="The Tyee's B.C. Election 2013 Riding Map & Guide">Back to the BC Election Map and Guide</a></li>
+                <li><a href="http://thetyee.ca/Blogs/TheHook/" title="The Election Hook. Political News, Freshly Caught">Back to The Election Hook</a></li>
+                <li><a href="http://thetyee.ca" title="B.C.'s Home for News, Culture and Solutions">Back to The Tyee</a></li>
+            </ul>
+% end
+
+% content_for sharing => begin
+                <a class="btn_google" target="_blank" href="https://plus.google.com/share?hl=en&url=http://election.thetyee.ca" title="Share on Google Plus"><img src="<%= $asset %>/ui/img/google-24x24.png" /></a>
+                <a class="btn_facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?t=BC%20Election%202013%20Map%20%26%20Guide%20--%20Full%20candidates%20listing%20%7C%20The%20Tyee&u=http://election.thetyee.ca/cadidates" title="Share on Facebook"><img src="<%= $asset %>/ui/img/facebook-24x24.png" /></a>
+                <a class="btn_twitter" target="_blank" href="http://twitter.com/share?text=BC%20Election%202013%20Map%20%26%20Guide%20--%20Full%20candidates%20listing%20via%20%40TheTyee%20%23bcpoli&url=http://election.thetyee.ca/candidates" title="Share on Twitter"><img src="<%= $asset %>/ui/img/twitter-24x24.png" /></a>
+% end
+            <div id="sharing" class="row-fluid">
+                <%= content_for 'sharing' %>
+            </div>
+            <header>
+            <a title="Back to The Tyee's front page" href="http://thetyee.ca">
+                <div id="map"></div>
+            </a>
+            </header>
+            <div id="section-title">
+                <h2>BC Election 2013 Map & Guide</h2> 
+            </div>
+            <div id="breadcrumb" class="row-fluid">
+                <div class="span12">
+                    <ul class="breadcrumb">
+                        <li><a href="http://thetyee.ca/Blogs/TheHook/">Election Hook</a> <span class="divider">/</span></li>
+                        <li><a href="/">Map</a> <span class="divider">/</span></li>
+                        <li class="active">Ridings</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="content" class="row-fluid">
+                <div id="content-main" class="span12">
+                    <ul class="topnav nav nav-pills">
+                      <li><a title="BC Election 2013 Map and Guide | Your riding-by-riding source for election issues and action"href="/">Home</a></li>
+                      <li><a title="BC Election 2013 Candidates" href="/candidates">Candidates</a></li>
+                      <li class="active"><a title="Ridings to Watch: Swings, high profile contenders, and where BC history could be made." href="/ridings">Forecasts</a></li>
+                    </ul>
+                    <hr class="nav-sep" />
+                    <h1>The Tyee's BC Election 2013 Riding Forecasts</h1>
+                    <p>We have analyzed the polls, mulled over elections past, and peered into our crystal ball to bring you our predictions for which candidates will win which ridings.
+                    </p>
+                    <p>These calls are divided up into likely wins and definite wins, with some ridings deemed too close to call.</p>
+                    <p>These predictions are by no means set in stone. We fully expect them to change as the campaign season rolls on and we hope you, our readers, will provide insight from your own ridings across the province. Email feedback <a href="http://www.google.com/recaptcha/mailhide/d?k=01mUCmm4B0TtUYLcDfyl8yqw==&c=DpDpCpqFpinNpOeUeUDc8C_lqrkfpjRKl_us2U6eNck=">here</a>.
+                    </p>
+                    <div id="quickstats" class="well">
+                        <h3>Quick stats on The Tyee's BC Election 2013 calls</h3>
+                        <p>The Tyee has called <b><%= $stats->{'ridings'}{'definitely'} %> ridings "Definitely,"</b> <b><%= $stats->{'ridings'}{'likely'} %> ridings "Likely,"</b> and there are <b><%= $stats->{'ridings'}{'tooclose'} %> ridings that are still "Too close to call."</b></p>
+                        <ul id="chart-call-by-party-totals" class="span4 chartlist">
+                        <h4>Totals</h4>
+                            % for my $p ( sort { $stats->{'parties'}{$b}{'total'} <=> $stats->{'parties'}{$a}{'total'} } keys $stats->{'parties'} ) {
+                            % next unless $stats->{'parties'}{ $p }{'total'};
+                            <li>
+                            <i><%= $parties->{ $p }{'shortname'} %> </i>
+                            <span class="count"><%= $stats->{'parties'}{ $p }{'total'} %></span>  
+                            <span class="index" style="background: <%= $parties->{ $p }{'colour'} %>; width: <%= round( ( $stats->{'parties'}{ $p }{'total'} / 85, 2) ) * 100 %>%"><%= round( ( $stats->{'parties'}{ $p }{'total'} / 85, 2) ) * 100 %>%</span> 
+                            </li>
+                        % }
+                            <li>
+                            <i>Too close to call: </i>
+                            <span class="count"><%= $stats->{'ridings'}{'tooclose'} %></span>  
+                            <span class="index" style="width: <%= round( ( $stats->{'ridings'}{'tooclose'} / 85, 2) ) * 100 %>%"><%= round( ( $stats->{'ridings'}{'tooclose'} / 85, 2) ) * 100 %>%</span> 
+                            </li>
+                        </ul>
+                        <ul id="chart-call-by-party-def" class="span4 chartlist">
+                        <h4>Called Definitely</h4>
+                            % for my $p ( sort { $stats->{'parties'}{$b}{'total'} <=> $stats->{'parties'}{$a}{'total'} } keys $stats->{'parties'} ) { 
+                            % next unless $stats->{'parties'}{ $p }{'definitely'};
+                            <li>
+                            <i><%= $parties->{ $p }{'shortname'} %> </i>
+                            <span class="count"><%= $stats->{'parties'}{ $p }{'definitely'} %></span>  
+                            <span class="index" style="background: <%= $parties->{ $p }{'colour'} %>; width: <%= round( ( $stats->{'parties'}{ $p }{'definitely'} / 85, 2) ) * 100 %>%"><%= round( ( $stats->{'parties'}{ $p }{'definitely'} / 85, 2) ) * 100 %>%</span> 
+                            </li>
+                        % }
+                        </ul>
+                        <ul id="chart-call-by-party-likely" class="span4 chartlist">
+                        <h4>Called Likely</h4>
+                            % for my $p ( sort { $stats->{'parties'}{$b}{'total'} <=> $stats->{'parties'}{$a}{'total'} } keys $stats->{'parties'} ) { 
+                            % next unless $stats->{'parties'}{ $p }{'likely'};
+                            <li>
+                            <i><%= $parties->{ $p }{'shortname'} %> </i>
+                            <span class="count"><%= $stats->{'parties'}{ $p }{'likely'} %></span>  
+                            <span class="index" style="background: <%= $parties->{ $p }{'colour'} %>; width: <%= round( ( $stats->{'parties'}{ $p }{'likely'} / 85, 2) ) * 100 %>%"><%= round( ( $stats->{'parties'}{ $p }{'likely'} / 85, 2) ) * 100 %>%</span> 
+                            </li>
+                        % }
+                        </ul>
+                    <br clear="all" />
+                </div>
+                <div id="ridings"> 
+                    <table id="ridings-table" class="table table-striped table-bordered tablesorter hidden-phone visible-tablet visible-desktop">
+                        <caption>Riding calls</caption>
+                        <thead>
+                            <tr>
+                                <th>Riding</th>
+                                <th>Call</th>
+                                <th>Party</th>
+                                <th>Explanation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            % for my $r ( @$ridings ) {
+                            <tr>
+                                <td width="200">
+                                    <strong>
+                                        <a href="/riding/<%= $r->{'slug'} %>" title="Find out more about <%= $r->{'name'} %> Riding: BC Conservative, BC Green, BC Liberal, BC NDP &amp; Independent Candidates."><%= $r->{'name'} %></a>
+                                    </strong>
+                                </td>
+                                 <td width="150">
+                                    <%= $r->{'call'} %>
+                                </td>
+                                <td>
+                                % if ( $r->{'party'} ) {
+                                <span class="label label-<%= $r->{'partyslug'} %>" style="background-color: <%= $parties->{ $r->{'partyslug'} }{'colour'} %>;"><%== $parties->{ $r->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $r->{'partyslug'} }{'website'} . '">' . $parties->{ $r->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $r->{'partyslug'} }{'shortname'} %></span>
+                                % }
+                                </td>
+                                <td class="reasoning">
+                                    <%== markdown( $r->{'reasoning'} ) %>
+                                </td>
+                            </tr>
+                            % }
+                        </tbody>
+                    </table>
+                    <dl class="ridings visible-phone hidden-tablet hidden-desktop">
+                    % for my $r ( @$ridings ) {
+                        <dt>
+                            <strong>
+                                <a href="/riding/<%= $r->{'slug'} %>" title="Find out more about <%= $r->{'name'} %> Riding: BC Conservative, BC Green, BC Liberal, BC NDP &amp; Independent Candidates."><%= $r->{'name'} %></a>
+                            </strong>
+                        </dt>
+                        <dd><%= $r->{'call'} %></dd>
+                        <dd>
+                        % if ( $r->{'party'} ) {
+                        <span class="label label-<%= $r->{'partyslug'} %>" style="background-color: <%= $parties->{ $r->{'partyslug'} }{'colour'} %>;"><%== $parties->{ $r->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $r->{'partyslug'} }{'website'} . '">' . $parties->{ $r->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $r->{'partyslug'} }{'shortname'} %></span>
+                        % }
+                        </dd>
+                  % }
+                 </dl>
+            </div>
+            <br clear="all" />
+            <div id="reader-involvement" class="alert alert-warning">
+                <p>
+                Help us make these riding pages richer. Email your big issues, story ideas or scuttlebutt <a href="http://www.google.com/recaptcha/mailhide/d?k=01mUCmm4B0TtUYLcDfyl8yqw==&c=DpDpCpqFpinNpOeUeUDc8C_lqrkfpjRKl_us2U6eNck=">here</a>.
+                </p>
+                <p>
+                And for the latest Tyee election reporting, stay tuned to the <a href="http://thetyee.ca/Blogs/TheHook/">Election Hook</a>.
+                <p>
+            </div>
+        </div><!-- /.span8 -->
+    </div> <!-- /.row-fluid -->   

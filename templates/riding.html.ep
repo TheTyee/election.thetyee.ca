@@ -105,18 +105,17 @@
                     <ul class="topnav nav nav-pills">
                       <li><a title="BC Election 2013 Map and Guide | Your riding-by-riding source for election issues and action"href="/">Home</a></li>
                       <li><a title="BC Election 2013 Candidates" href="/candidates">Candidates</a></li>
-                      <li><a title="Top 10 Ridings to Watch: Swings, high profile contenders, and where BC history could be made." href="http://thetyee.ca/News/2013/04/09/BC-Election-Ridings-to-Watch/">Hot Ridings</a></li>
+                      <li><a title="Ridings to Watch: Swings, high profile contenders, and where BC history could be made." href="/ridings">Forecasts</a></li>
                     </ul>
                     <hr class="nav-sep" />
                     <h1><%= $riding->{'riding'} %></h1>
                     % if ( $riding->{'dek'} ) { 
                     <h2 class="dek"><%= $riding->{'dek'} %></h2>
                     % }
-                    % if ( $riding->{'tyeecall'} ) {
-                    <p id="tyeecall" class="alert alert-warning">
-                        <i class="icon-exclamation-sign"></i>&nbsp;Tyee projected to win: <%= $riding->{'tyeecall'} %>
-                    </p>
-                    % }
+                    <div id="tyeecall" class="alert alert-warning">
+                    % my $call = @$call[0];
+                    <i class="icon-exclamation-sign"></i>&nbsp;<strong>Tyee call:</strong> <%= $call->{'call'} %><%= $call->{'party'} ? ', ' . $call->{'party'} : '' %>. <%== $call->{'reasoning'} %>
+                    </div>
                     <div id="race" class="row-fluid">
                         <div id="candidates" class="span6"> 
                             <table class="table table-striped table-bordered">
