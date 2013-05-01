@@ -113,7 +113,7 @@
                     <h2 class="dek"><%= $riding->{'dek'} %></h2>
                     % }
                     <div id="tyeecall" class="alert alert-warning">
-                    % my $call = @$call[0];
+                    % my $call = $call;
                     <i class="icon-exclamation-sign"></i>&nbsp;<strong>Tyee call:</strong> <%= $call->{'call'} %><%= $call->{'party'} ? ' ' . $call->{'party'} : '' %>. <%== $call->{'reasoning'} %>
                     </div>
                     <div id="race" class="row-fluid">
