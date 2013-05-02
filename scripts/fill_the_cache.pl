@@ -196,7 +196,6 @@ sub _cache_write_candidates {
 
 sub _cache_write_poll {
     my $tx = $ua->get( $config->{'remote_inc_path'} . '/Polls/include.php' );
-
     if ( my $res = $tx->success ) {
         my $poll_html = $tx->res->body;
         $cache->set( 'poll', $poll_html, "never" );
