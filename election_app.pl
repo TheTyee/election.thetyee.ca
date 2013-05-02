@@ -21,7 +21,7 @@ my $cache = CHI->new(
 get '/' => sub {
     my $self = shift;
     my $hook_posts  = $cache->get( 'HookPostsNew' );
-    my $poll        = $cache->get( 'Poll' );
+    my $poll        = $cache->get( 'poll' );
     # Stash the data that we'll use in the index template
     $self->stash(
         hook_posts => $hook_posts,
@@ -43,8 +43,8 @@ get '/riding/:name' => sub {
     my $party_lookup    = $cache->get( 'PartyLookup' );
     my $candidates      = $cache->get( $name . '-candidates' );
     my $candidate_names = _get_candidate_names( $candidates );
-    my $riding_calls    =  $cache->get( $name . '-calls' );
-    my $poll            = $cache->get( 'Poll' );
+    my $riding_calls    = $cache->get( $name . '-calls' );
+    my $poll            = $cache->get( 'poll' );
     # Stash the data 
     $self->stash(
         riding          => $riding,
