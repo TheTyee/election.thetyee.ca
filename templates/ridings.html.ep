@@ -60,9 +60,9 @@
 % end
 
 % content_for sharing => begin
-                <a class="btn_google" target="_blank" href="https://plus.google.com/share?hl=en&url=http://election.thetyee.ca" title="Share on Google Plus"><img src="<%= $asset %>/ui/img/google-24x24.png" /></a>
-                <a class="btn_facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?t=BC%20Election%202013%20Map%20%26%20Guide%20--%20Full%20candidates%20listing%20%7C%20The%20Tyee&u=http://election.thetyee.ca/cadidates" title="Share on Facebook"><img src="<%= $asset %>/ui/img/facebook-24x24.png" /></a>
-                <a class="btn_twitter" target="_blank" href="http://twitter.com/share?text=BC%20Election%202013%20Map%20%26%20Guide%20--%20Full%20candidates%20listing%20via%20%40TheTyee%20%23bcpoli&url=http://election.thetyee.ca/candidates" title="Share on Twitter"><img src="<%= $asset %>/ui/img/twitter-24x24.png" /></a>
+                <a class="btn_google" target="_blank" href="https://plus.google.com/share?hl=en&url=http://election.thetyee.ca/ridings" title="Share on Google Plus"><img src="<%= $asset %>/ui/img/google-24x24.png" /></a>
+                <a class="btn_facebook" target="_blank" href="http://www.facebook.com/sharer/sharer.php?t=BC%20Election%202013%20Map%20%26%20Guide%20--%20Full%20candidates%20listing%20%7C%20The%20Tyee&u=http://election.thetyee.ca/ridings" title="Share on Facebook"><img src="<%= $asset %>/ui/img/facebook-24x24.png" /></a>
+                <a class="btn_twitter" target="_blank" href="http://twitter.com/share?text=BC%20Election%202013%20Map%20%26%20Guide%20--%20Full%20candidates%20listing%20via%20%40TheTyee%20%23bcpoli&url=http://election.thetyee.ca/ridings" title="Share on Twitter"><img src="<%= $asset %>/ui/img/twitter-24x24.png" /></a>
 % end
             <div id="sharing" class="row-fluid">
                 <%= content_for 'sharing' %>
