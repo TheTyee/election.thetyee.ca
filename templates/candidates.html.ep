@@ -140,7 +140,7 @@
 
                 <div id="candidates"> 
                     <table id="candidates-table" class="table table-striped table-bordered tablesorter hidden-phone visible-tablet visible-desktop">
-                        <caption>This year's candidates so far</caption>
+                        <caption>This year's candidates</caption>
                         <thead>
                             <tr>
                                 <th>Candidate</th>
