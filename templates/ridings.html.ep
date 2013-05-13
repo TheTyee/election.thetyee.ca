@@ -100,7 +100,8 @@
                     </p>
                     <div id="quickstats" class="well">
                         <h3>Quick stats on The Tyee's BC Election 2013 calls</h3>
-                        <p>The Tyee has called <b><%= $stats->{'ridings'}{'definitely'} %> ridings "Definitely,"</b> <b><%= $stats->{'ridings'}{'likely'} %> ridings "Likely,"</b> and there are <b><%= $stats->{'ridings'}{'tooclose'} %> ridings that are still "Too close to call."</b></p>
+                        % my $tooclose = $stats->{'ridings'}{'tooclose'} ? $stats->{'ridings'}{'tooclose'} : 0;
+                        <p>The Tyee has called <b><%= $stats->{'ridings'}{'definitely'} %> ridings "Definitely,"</b> <b><%= $stats->{'ridings'}{'likely'} %> ridings "Likely,"</b> and there are <b><%= $tooclose %> ridings that are still "Too close to call."</b></p>
                         <ul id="chart-call-by-party-totals" class="span4 chartlist">
                         <h4>Totals</h4>
                             % for my $p ( sort { $stats->{'parties'}{$b}{'total'} <=> $stats->{'parties'}{$a}{'total'} } keys $stats->{'parties'} ) {
@@ -113,8 +114,8 @@
                         % }
                             <li>
                             <i>Too close to call: </i>
-                            <span class="count"><%= $stats->{'ridings'}{'tooclose'} %></span>  
-                            <span class="index" style="width: <%= round( ( $stats->{'ridings'}{'tooclose'} / 85, 2) ) * 100 %>%"><%= round( ( $stats->{'ridings'}{'tooclose'} / 85, 2) ) * 100 %>%</span> 
+                            <span class="count"><%= $tooclose %></span>  
+                            <span class="index" style="width: <%= round( ( $tooclose / 85, 2) ) * 100 %>%"><%= round( ( $tooclose / 85, 2) ) * 100 %>%</span> 
                             </li>
                         </ul>
                         <ul id="chart-call-by-party-def" class="span4 chartlist">
