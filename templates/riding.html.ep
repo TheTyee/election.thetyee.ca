@@ -119,7 +119,7 @@
                     <div id="race" class="row-fluid">
                         <div id="candidates" class="span6"> 
                             <table class="table table-striped table-bordered">
-                                <caption>This year's candidates so far</caption>
+                                <caption>This year's candidates</caption>
                                 <tbody>
                                     %# TODO Going to change to an array for $candidate data
                                     % for my $candidate ( sort keys $candidates ) {
