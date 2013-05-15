@@ -287,6 +287,10 @@
             <%= content_for 'sharing' %>
         </div><!-- / .span4 -->
     </div> <!-- /.row-fluid -->   
+    <!-- 
     <pre>
+    %= dumper $ebc
+    %= dumper $ebc_lookup
+    %= dumper $candidates
     </pre>
-
+    -->
