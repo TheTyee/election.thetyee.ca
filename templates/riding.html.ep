@@ -28,8 +28,10 @@
             var center = [ lat, lng ];
             map.setView( center , 8);
         });
-        $('#winner div#image').append(myimage);
-        </script>
+
+      });
+    $('#winner div#image').append(myimage);
+    </script>
 % end
 
 % content_for footer_nav => begin
@@ -275,13 +277,13 @@
         </div><!-- /.span8 -->
         <div id="content-sidebar" class="span4">
             %= include 'advertisement'
-            <div id="recent-stories" class="story-list">
-                <div class="recent thetyee">
-                    <h3>Riding Related Tyee News</h3>
-                    <ul>
-                    </ul>
-                </div>
-            </div>
+            <!--<div id="recent-stories" class="story-list">-->
+                <!--<div class="recent thetyee">-->
+                    <!--<h3>Riding Related Tyee News</h3>-->
+                    <!--<ul>-->
+                    <!--</ul>-->
+                <!--</div>-->
+            <!--</div>-->
             %= include 'sidebar'
             <%= content_for 'sharing' %>
         </div><!-- / .span4 -->
