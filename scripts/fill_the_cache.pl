@@ -29,8 +29,8 @@ my $ua = Mojo::UserAgent->new;
 my $cache = CHI->new(
     driver     => 'FastMmap',
     root_dir   => $config->{'cache_name'},
-    cache_size => '20m',
-    page_size  => '2048k',
+    cache_size => '50m',
+    page_size  => '5026k',
 );
 
 use constant REPRESENT_API => 'http://represent.opennorth.ca';
@@ -218,9 +218,10 @@ sub _cache_write_poll {
 
 sub _cache_write_ebc {
     my $csv_data = $ua->get( EBC_DATA_URI )->res->body;
+    print Dumper( $csv_data );
     $csv_data > io('ebc.csv'); 
     #my $data = Text::CSV::Slurp->load( string => $csv_data );
-    my $data = Text::CSV::Slurp->load(file       => 'ebc.csv');
+    my $data = Text::CSV::Slurp->load(file       => 'ebc.csv' , allow_loose_quotes  => 1 );
     my $sorted   = {};
     for my $d ( @$data ) {
         say "Working on " . $d->{'Electoral District Name'} if $opt->verbose;
@@ -252,7 +253,7 @@ sub _cache_write_ebc {
         my $riding = $sorted->{ $r };
         $cache->set( $r . '-votes', $riding, "never" );
     }
-    print Dumper( $cache->get( 'abbotsford-mission-votes' ) ) if $opt->verbose;
+    print Dumper( $cache->get( 'vancouver-mount-pleasant-votes' ) ) if $opt->verbose;
 }
 
 sub _cache_write_ebc_lookup {

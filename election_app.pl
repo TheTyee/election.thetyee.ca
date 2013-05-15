@@ -13,8 +13,8 @@ my $config = plugin 'JSONConfig';
 my $cache = CHI->new(
     driver     => 'FastMmap',
     root_dir   => $config->{'cache_name'},
-    cache_size => '20m',
-    page_size  => '2048k',
+    cache_size => '50m',
+    page_size  => '5026k',
 );
 
 # Route requests to /
