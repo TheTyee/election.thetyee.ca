@@ -9,6 +9,7 @@ use CHI;
 use Getopt::Long::Descriptive;
 use Text::CSV::Slurp;
 use IO::All;
+use Text::StripAccents;
 use Data::Dumper;
 
 my ( $opt, $usage ) = describe_options(
@@ -178,7 +179,7 @@ sub _cache_write_riding_call {
     }
     @$ridings = sort { $a->{'key'} cmp $b->{'key'} } @$ridings;
     $cache->set( 'ridings', $ridings, "never" );
-    print Dumper( $cache->get( $ridings ) ) if $opt->verbose;
+    print Dumper( $cache->get( 'ridings' ) ) if $opt->verbose;
 }
 
 sub _cache_write_candidates_by_riding {
