@@ -277,13 +277,16 @@
         <div id="content-sidebar" class="span4">
             %= include 'advertisement'
             <div id="recent-stories" class="story-list">
-                <div class="recent thetyee">
-                    <h3>Riding Related Tyee News</h3>
-                    <ul>
-                    </ul>
-                </div>
+                <!--<div class="recent thetyee">-->
+                    <!--<h3>Riding Related Tyee News</h3>-->
+                    <!--<ul>-->
+                    <!--</ul>-->
+                <!--</div>-->
             </div>
             %= include 'sidebar'
             <%= content_for 'sharing' %>
         </div><!-- / .span4 -->
     </div> <!-- /.row-fluid -->   
+    <pre>
+    </pre>
+
