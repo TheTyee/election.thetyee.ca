@@ -8,6 +8,7 @@ use utf8::all;
 use CHI;
 use Getopt::Long::Descriptive;
 use Text::CSV::Slurp;
+use IO::All;
 use Data::Dumper;
 
 my ( $opt, $usage ) = describe_options(
@@ -35,7 +36,7 @@ my $cache = CHI->new(
 use constant REPRESENT_API => 'http://represent.opennorth.ca';
 use constant TYEE_API      => 'http://api.thetyee.ca/v1/';
 use constant EBC_DATA_URI =>
-    'https://docs.google.com/spreadsheet/pub?key=0AgZzmiG9MvT4dFJqSWpUUVNWRHpvVWI0dEpxV0VMV0E&output=csv';
+    'http://electionsbcenr.blob.core.windows.net/electionsbcenr/GE-2013-05-14_Candidate.csv';
 
 # Connect to Google Spreadsheets on app startup
 my $service = Net::Google::Spreadsheets->new(
@@ -59,6 +60,7 @@ sub main {
 
             # Hourly
             _cache_write_ebc();
+            _cache_write_ebc_lookup();
             _cache_write_hook_posts();
             _cache_write_riding_call();
             _cache_write_poll();
@@ -67,6 +69,7 @@ sub main {
 
             # Daily
             _cache_write_ebc();
+            _cache_write_ebc_lookup();
             _cache_write_ridings();
             _cache_write_parties();
             _cache_write_party_lookup();
@@ -75,6 +78,7 @@ sub main {
         }
         when ( /all/ ) {
             _cache_write_ebc();
+            _cache_write_ebc_lookup();
             _cache_write_hook_posts();
             _cache_write_riding_call();
             _cache_write_ridings();
@@ -214,7 +218,9 @@ sub _cache_write_poll {
 
 sub _cache_write_ebc {
     my $csv_data = $ua->get( EBC_DATA_URI )->res->body;
-    my $data     = Text::CSV::Slurp->load( string => $csv_data );
+    $csv_data > io('ebc.csv'); 
+    #my $data = Text::CSV::Slurp->load( string => $csv_data );
+    my $data = Text::CSV::Slurp->load(file       => 'ebc.csv');
     my $sorted   = {};
     for my $d ( @$data ) {
         say "Working on " . $d->{'Electoral District Name'} if $opt->verbose;

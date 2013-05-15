@@ -143,7 +143,7 @@
                         <div id="candidates" class="span12"> 
                             <table class="table table-striped table-bordered">
                                 % my $percent = round( $ebc->{'reported'} / $ebc->{'total'} * 100, 1);
-                                <caption>Live Results (Updating every 5 minutes). Last updated: <%= $ebc->{'time'} %>
+                                <caption>Live Results (Updated every 5 minutes). Last updated: <%= $ebc->{'time'} %>
                                     <br />Polls reporting: <%= $ebc->{'ballots'} %> (<%= $percent %>%)</caption>
                                 <tbody>
                                     <tr>
