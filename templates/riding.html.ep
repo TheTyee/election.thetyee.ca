@@ -28,7 +28,40 @@
             var center = [ lat, lng ];
             map.setView( center , 8);
         });
+ // Get paths for Riding Related Tyee Reporting
+        var paths = [];
+        % for my $path ( @$related_stories ) {
+        paths.push("<%= $path %>");
+        % }
 
+        // Some problems with this, not the least of which is the latency
+        // TODO only load first five, then offer option to load more
+        // Set up the HTML first (assumes the <ul> is empty)
+            $.each(paths, function (index, value) {
+                var li = $('<li>')
+                .attr('id', 'story-'+index)
+                .hide();
+                $('#recent-stories ul').append(li);
+            });
+            // For each related story path, lookup the story via The Tyee API
+            $.each(paths, function (index, value) {
+                var url = 'http://api.thetyee.ca/v1/search/path' + value + '?callback=?';
+                $.getJSON(url, function (data) {
+                    // Yeah, I know -- yuk! -- API response need improvement.
+                    var story = data.hits.hits[0]._source;
+                    var date  = moment( story.storyDate ).fromNow();
+                    var li = $('#story-'+index)
+                    .append($('<h4>'))
+                        .append($('<a>')
+                            .attr('href', story.uri)
+                            .attr('title', story.title).text(story.title))
+                            .append($('<p>')
+                            .text( story.teaser ))
+                            .append($('<p class="date">')
+                            .text( 'Published ' + date ))
+                            .show();
+                        })
+                    });
       });
     $('#winner div#image').append(myimage);
     </script>
@@ -98,6 +131,7 @@
 <br />
 <%== $winner->{'twitter'} ? '<span class="can-twitter"><a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $winner->{'twitter'} . '"><i class="icon-twitter-sign">&nbsp;</i></a></span>' : '' %><%== $winner->{'facebook'} ? '<span class="can-facebook"><a target="_blank" href="' . $winner->{'facebook'} . '"><i class="icon-facebook-sign">&nbsp;</i></a></span>' : '' %><%== $winner->{'email'} ? '<span class="can-email"><a href="mailto:' . $winner->{'email'} . '"><i class="icon-envelope-alt">&nbsp;</i></a></span>' : '' %>
 <p><%== $call->{'winnercommentary'} %></p>
+<br clear="all" />
                     </div>
                     % } else {
                     <div id="tyeecall" class="alert alert-warning">
@@ -277,13 +311,13 @@
         </div><!-- /.span8 -->
         <div id="content-sidebar" class="span4">
             %= include 'advertisement'
-            <!--<div id="recent-stories" class="story-list">-->
-                <!--<div class="recent thetyee">-->
-                    <!--<h3>Riding Related Tyee News</h3>-->
-                    <!--<ul>-->
-                    <!--</ul>-->
-                <!--</div>-->
-            <!--</div>-->
+            <div id="recent-stories" class="story-list">
+                <div class="recent thetyee">
+                    <h3>Riding Related Tyee News</h3>
+                    <ul>
+                    </ul>
+                </div>
+            </div>
             %= include 'sidebar'
             <%= content_for 'sharing' %>
         </div><!-- / .span4 -->
