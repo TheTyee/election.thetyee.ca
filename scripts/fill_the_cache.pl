@@ -268,6 +268,6 @@ sub _cache_write_ebc_lookup {
         $key     =~ s/\W/-/g;
         $ebc_lookup->{ $can->{'ebccandidateslug'} } = $key;
     }
-    $cache->set( 'ebclookup', $ebc_lookup, "never" );
-    print Dumper( $cache->get( 'ebclookup' ) ) if $opt->verbose;
+    $cache->set( 'ebclookup2', $ebc_lookup, "never" );
+    print Dumper( $cache->get( 'ebclookup2' ) ) if $opt->verbose;
 }
