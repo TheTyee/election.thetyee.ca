@@ -7,6 +7,8 @@ use Net::Google::Spreadsheets;
 use utf8::all;
 use CHI;
 use Getopt::Long::Descriptive;
+use Text::CSV::Slurp;
+use IO::All;
 use Data::Dumper;
 
 my ( $opt, $usage ) = describe_options(
@@ -27,12 +29,14 @@ my $ua = Mojo::UserAgent->new;
 my $cache = CHI->new(
     driver     => 'FastMmap',
     root_dir   => $config->{'cache_name'},
-    cache_size => '10m',
-    page_size  => '1024k',
+    cache_size => '20m',
+    page_size  => '2048k',
 );
 
 use constant REPRESENT_API => 'http://represent.opennorth.ca';
 use constant TYEE_API      => 'http://api.thetyee.ca/v1/';
+use constant EBC_DATA_URI =>
+    'http://electionsbcenr.blob.core.windows.net/electionsbcenr/GE-2013-05-14_Candidate.csv';
 
 # Connect to Google Spreadsheets on app startup
 my $service = Net::Google::Spreadsheets->new(
@@ -48,9 +52,15 @@ main();
 
 sub main {
     given ( $opt->frequency ) {
+        when ( /minutes/ ) {
+            _cache_write_ebc();
+            _cache_write_ebc_lookup();
+        }
         when ( /hourly/ ) {
 
             # Hourly
+            _cache_write_ebc();
+            _cache_write_ebc_lookup();
             _cache_write_hook_posts();
             _cache_write_riding_call();
             _cache_write_poll();
@@ -58,6 +68,8 @@ sub main {
         when ( /daily/ ) {
 
             # Daily
+            _cache_write_ebc();
+            _cache_write_ebc_lookup();
             _cache_write_ridings();
             _cache_write_parties();
             _cache_write_party_lookup();
@@ -65,6 +77,8 @@ sub main {
             _cache_write_candidates();
         }
         when ( /all/ ) {
+            _cache_write_ebc();
+            _cache_write_ebc_lookup();
             _cache_write_hook_posts();
             _cache_write_riding_call();
             _cache_write_ridings();
@@ -200,4 +214,55 @@ sub _cache_write_poll {
         my $poll_html = $tx->res->body;
         $cache->set( 'poll', $poll_html, "never" );
     }
+}
+
+sub _cache_write_ebc {
+    my $csv_data = $ua->get( EBC_DATA_URI )->res->body;
+    $csv_data > io('ebc.csv'); 
+    #my $data = Text::CSV::Slurp->load( string => $csv_data );
+    my $data = Text::CSV::Slurp->load(file       => 'ebc.csv');
+    my $sorted   = {};
+    for my $d ( @$data ) {
+        say "Working on " . $d->{'Electoral District Name'} if $opt->verbose;
+        my $slug = lc( $d->{'Electoral District Name'} );
+        $slug =~ s/\W/-/g;
+        my $candidate_slug = lc( $d->{'Candidate\'s Ballot Name'} );
+        $candidate_slug =~ s/\W/-/g;
+        my $candidate = {
+            slug    => $candidate_slug,
+            name    => $d->{'Candidate\'s Ballot Name'},
+            party   => $d->{'Affiliation'},
+            votes   => $d->{'Total Valid Votes'},
+            popular => $d->{'% of Popular Vote'},
+        };
+        push @{ $sorted->{ $slug }{'candidates'} },
+            $candidate;
+        @{ $sorted->{ $slug }{'candidates'} }
+            = sort { $b->{'votes'} <=> $a->{'votes'} }
+            @{ $sorted->{ $slug }{'candidates'} };
+        $sorted->{ $slug }{'ballots'}
+            = $d->{'Ballot Boxes Reported'};
+        $sorted->{ $slug }{'time'} = $d->{'Time'};
+        $sorted->{ $slug }{'id'} = $d->{'Electoral District Code'};
+        my ( $reported, $total ) = split(' of ', $sorted->{ $slug }{'ballots'} );
+        $sorted->{ $slug }{'reported'} = $reported;
+        $sorted->{ $slug }{'total'}    = $total;
+    }
+    for my $r ( keys $sorted ) {
+        my $riding = $sorted->{ $r };
+        $cache->set( $r . '-votes', $riding, "never" );
+    }
+    print Dumper( $cache->get( 'abbotsford-mission-votes' ) ) if $opt->verbose;
+}
+
+sub _cache_write_ebc_lookup {
+    my $candidates      = $cache->get( 'candidates' );
+    my $ebc_lookup = {};
+    for my $can ( @$candidates ) {
+        my $key = lc( $can->{'lastname'} );
+        $key     =~ s/\W/-/g;
+        $ebc_lookup->{ $can->{'ebccandidateslug'} } = $key;
+    }
+    $cache->set( 'ebclookup', $ebc_lookup, "never" );
+    print Dumper( $cache->get( 'ebclookup' ) ) if $opt->verbose;
 }
