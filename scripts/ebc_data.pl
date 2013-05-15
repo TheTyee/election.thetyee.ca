@@ -20,16 +20,11 @@ use constant EBC_DATA_URI =>
 
 my $csv_data = $ua->get( EBC_DATA_URI )->res->body;
 
-#print Dumper( $csv_data );
+$csv_data > io( 'ebc.csv' );
 
-#$csv_data = substr $csv_data, 3;
-
-#print Dumper( $csv_data );
-
-$csv_data > io('ebc.csv'); 
-
-#my $data = Text::CSV::Slurp->load( string => $csv_data );
-my $data = Text::CSV::Slurp->load(file       => 'ebc.csv');
-
+my $data = Text::CSV::Slurp->load(
+    file               => 'ebc.csv',
+    allow_loose_quotes => 1
+);
 
 print Dumper( $data );
