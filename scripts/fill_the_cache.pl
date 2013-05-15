@@ -68,17 +68,15 @@ sub main {
         when ( /daily/ ) {
 
             # Daily
-            _cache_write_ebc();
-            _cache_write_ebc_lookup();
             _cache_write_ridings();
             _cache_write_parties();
             _cache_write_party_lookup();
             _cache_write_averages();
             _cache_write_candidates();
-        }
-        when ( /all/ ) {
             _cache_write_ebc();
             _cache_write_ebc_lookup();
+        }
+        when ( /all/ ) {
             _cache_write_hook_posts();
             _cache_write_riding_call();
             _cache_write_ridings();
@@ -87,6 +85,8 @@ sub main {
             _cache_write_averages();
             _cache_write_poll();
             _cache_write_candidates();
+            _cache_write_ebc();
+            _cache_write_ebc_lookup();
         }
     }
 }
@@ -178,6 +178,7 @@ sub _cache_write_riding_call {
     }
     @$ridings = sort { $a->{'key'} cmp $b->{'key'} } @$ridings;
     $cache->set( 'ridings', $ridings, "never" );
+    print Dumper( $cache->get( $ridings ) ) if $opt->verbose;
 }
 
 sub _cache_write_candidates_by_riding {
@@ -193,6 +194,7 @@ sub _cache_write_candidates_by_riding {
         $candidates->{$slug} = $candidate->content;
     }
     $cache->set( $name . '-candidates', $candidates, "never" );
+    print Dumper( $cache->get( $name . '-candidates' ) ) if $opt->verbose;
 }
 
 sub _cache_write_candidates {
@@ -206,6 +208,7 @@ sub _cache_write_candidates {
     }
     @$candidates = sort { $a->{'riding'} cmp $b->{'riding'} } @$candidates;
     $cache->set( 'candidates', $candidates, "never" );
+    #print Dumper( $cache->get( 'candidates' ) ) if $opt->verbose;
 }
 
 sub _cache_write_poll {
