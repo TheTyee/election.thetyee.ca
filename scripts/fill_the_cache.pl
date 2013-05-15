@@ -222,7 +222,7 @@ sub _cache_write_poll {
 
 sub _cache_write_ebc {
     my $csv_data = $ua->get( EBC_DATA_URI )->res->body;
-    print Dumper( $csv_data );
+    print Dumper( $csv_data ) if $opt->verbose;
     $csv_data > io('ebc.csv'); 
     #my $data = Text::CSV::Slurp->load( string => $csv_data );
     my $data = Text::CSV::Slurp->load(file       => 'ebc.csv' , allow_loose_quotes  => 1 );
