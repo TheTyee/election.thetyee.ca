@@ -287,6 +287,3 @@
             <%= content_for 'sharing' %>
         </div><!-- / .span4 -->
     </div> <!-- /.row-fluid -->   
-    %= dumper $ebc
-    %= dumper $ebc_lookup
-
