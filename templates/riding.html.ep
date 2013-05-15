@@ -64,6 +64,7 @@
                         })
                     });
                 });
+            $('#winner div#image').append(myimage);
             </script>
 % end
 
@@ -112,46 +113,67 @@
                     % if ( $riding->{'dek'} ) { 
                     <h2 class="dek"><%= $riding->{'dek'} %></h2>
                     % }
+                    % my $winner;
+                    % if ( $ebc->{'reported'} == $ebc->{'total'} ) { # Counts are done
+                    %  $winner = @{ $ebc->{'candidates'} }[0];
+                    %  $winner = $candidates->{ $ebc_lookup->{ $winner->{'slug'} } };
+                    % }
+                    % if ( $winner ) {
+                    <div id="winner" class="well">
+<i class="icon-exclamation-sign"></i>&nbsp;<strong>Winner</strong> 
+<br />
+<script>
+    var winner_twitter = "<%= $winner->{'twitter'} %>";
+    myimage = new Image();
+    myimage.src = 'http://api.twitter.com/1/users/profile_image/' + winner_twitter + '/?size=bigger';
+</script>
+<div id="image" style="float: left; margin-right: 10px;"></div>
+<%== $winner->{'url'} ? '<a href="' . $winner->{'url'} . '" ' . ' title="Web site for ' . $winner->{'fullname'} . '" >' . $winner->{'fullname'} . '</a>' : $winner->{'fullname'} %>&nbsp;<span class="label label-<%= $winner->{'partyslug'} %>" style="background-color: <%= $parties->{ $winner->{'partyslug'} }{'colour'} %>;"><%== $parties->{ $winner->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $winner->{'partyslug'} }{'website'} . '">' . $parties->{ $winner->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $winner->{'partyslug'} }{'shortname'} %></span>
+<br />
+<%== $winner->{'twitter'} ? '<span class="can-twitter"><a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $winner->{'twitter'} . '"><i class="icon-twitter-sign">&nbsp;</i></a></span>' : '' %><%== $winner->{'facebook'} ? '<span class="can-facebook"><a target="_blank" href="' . $winner->{'facebook'} . '"><i class="icon-facebook-sign">&nbsp;</i></a></span>' : '' %><%== $winner->{'email'} ? '<span class="can-email"><a href="mailto:' . $winner->{'email'} . '"><i class="icon-envelope-alt">&nbsp;</i></a></span>' : '' %>
+<p><%== $call->{'winnercommentary'} %></p>
+                    </div>
+                    % } else {
                     <div id="tyeecall" class="alert alert-warning">
                     % my $call = $call;
                     <i class="icon-exclamation-sign"></i>&nbsp;<strong>Tyee call:</strong> <%= $call->{'call'} %><%= $call->{'party'} ? ' ' . $call->{'party'} : '' %>. <%== $call->{'reasoning'} %>
                     </div>
+                    % } 
                     <div id="race" class="row-fluid">
-                        <div id="candidates" class="span6"> 
+                        <div id="candidates" class="span12"> 
                             <table class="table table-striped table-bordered">
-                                <caption>This year's candidates</caption>
+                                % my $percent = round( $ebc->{'reported'} / $ebc->{'total'} * 100, 1);
+                                <caption>Live Results (Updated every 5 minutes). Last updated: <%= $ebc->{'time'} %>
+                                    <br />Polls reporting: <%= $ebc->{'ballots'} %> (<%= $percent %>%)</caption>
                                 <tbody>
-                                    %# TODO Going to change to an array for $candidate data
-                                    % for my $candidate ( sort keys $candidates ) {
-                                    % my $can = $candidates->{ $candidate };
                                     <tr>
                                         <th>
-                                            <%== $can->{'url'} ? '<a href="' . $can->{'url'} . '" ' . ' title="Web site for ' . $can->{'fullname'} . '" >' . $can->{'fullname'} . '</a>' : $can->{'fullname'} %>&nbsp;<span class="label label-<%= $can->{'partyslug'} %>" style="background-color: <%= $parties->{ $can->{'partyslug'} }{'colour'} %>;"><%== $parties->{ $can->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $can->{'partyslug'} }{'website'} . '">' . $parties->{ $can->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $can->{'partyslug'} }{'shortname'} %></span><br />
-                                           <%== $can->{'twitter'} ? '<span class="can-twitter"><a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $can->{'twitter'} . '"><i class="icon-twitter-sign">&nbsp;</i></a></span>' : '' %><%== $can->{'facebook'} ? '<span class="can-facebook"><a target="_blank" href="' . $can->{'facebook'} . '"><i class="icon-facebook-sign">&nbsp;</i></a></span>' : '' %><%== $can->{'email'} ? '<span class="can-email"><a href="mailto:' . $can->{'email'} . '"><i class="icon-envelope-alt">&nbsp;</i></a></span>' : '' %>
-
-
-                                            
+                                           Candidate 
                                        </th>
+                                        <th>
+                                           Votes 
+                                       </th>
+                                        <th>
+                                           Popular 
+                                       </th>
+                                    </tr>
+                                    %# TODO Going to change to an array for $candidate data
+                                    % for my $candidate ( @{ $ebc->{'candidates'} } ) {
+                                       <td>
+                                           % my $can = $candidates->{ $ebc_lookup->{ $candidate->{'slug'} } };
+<%== $can->{'url'} ? '<a href="' . $can->{'url'} . '" ' . ' title="Web site for ' . $can->{'fullname'} . '" >' . $can->{'fullname'} . '</a>' : $can->{'fullname'} %>&nbsp;<span class="label label-<%= $can->{'partyslug'} %>" style="background-color: <%= $parties->{ $can->{'partyslug'} }{'colour'} %>;"><%== $parties->{ $can->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $can->{'partyslug'} }{'website'} . '">' . $parties->{ $can->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $can->{'partyslug'} }{'shortname'} %></span><br />
+<%== $can->{'twitter'} ? '<span class="can-twitter"><a target="_blank" href="https://twitter.com/intent/user/?screen_name=' . $can->{'twitter'} . '"><i class="icon-twitter-sign">&nbsp;</i></a></span>' : '' %><%== $can->{'facebook'} ? '<span class="can-facebook"><a target="_blank" href="' . $can->{'facebook'} . '"><i class="icon-facebook-sign">&nbsp;</i></a></span>' : '' %><%== $can->{'email'} ? '<span class="can-email"><a href="mailto:' . $can->{'email'} . '"><i class="icon-envelope-alt">&nbsp;</i></a></span>' : '' %>
+                                       </td>
+                                       <td>
+                                           <%= $candidate->{'votes'} %>
+                                       </td>
+                                       <td>
+                                           <%= $candidate->{'popular'} %>
+                                       </td>
                                     </tr>
                                     % }
                                 </tbody>
                             </table>
-                        </div>
-                        <div id="incumbent" class="span6"> 
-                            <h3>Current MLA</h3>
-                            % if ( $rep_data ) {
-                            % my $party = $rep_data->{'party_name'};
-                            % $party   = lc( $party );
-                            % $party   =~ s/ /-/g;
-                            <img src="<%= $rep_data->{'photo_url'} %>" alt="
-                            <%= $rep_data->{'name'} %>" width="70" height="93" />
-                            <strong><%= $rep_data->{'name'} %></strong>&nbsp;<span class="label label-<%= $party %>" style="background-color: <%= $parties->{ $party }{'colour'} %>;"><a href="<%= $parties->{ $party }{'website'} %>"><%= $parties->{ $party }{'shortname'} %></a></span>
-                            <br>
-                            <a target="_blank" href="<%= $rep_data->{'url'} %>">MLA web page</a>
-                            </p>
-                            % } else {
-                            <p class="alert alert-error">Unable to retrieve the representative information for this riding.</p>
-                            % }
                         </div>
                     </div><!-- / #race -->
                     <div id="riding-summary" class="well">
