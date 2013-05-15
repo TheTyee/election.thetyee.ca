@@ -13,8 +13,8 @@ my $config = plugin 'JSONConfig';
 my $cache = CHI->new(
     driver     => 'FastMmap',
     root_dir   => $config->{'cache_name'},
-    cache_size => '10m',
-    page_size  => '1024k',
+    cache_size => '20m',
+    page_size  => '2048k',
 );
 
 # Route requests to /
@@ -45,6 +45,8 @@ get '/riding/:name' => sub {
     my $candidate_names = _get_candidate_names( $candidates );
     my $riding_calls    = $cache->get( $name . '-calls' );
     my $poll            = $cache->get( 'poll' );
+    my $votes           = $cache->get( $name . '-votes' );
+    my $ebc_lookup      = $cache->get( 'ebclookup' );
     # Stash the data 
     $self->stash(
         riding          => $riding,
@@ -59,6 +61,8 @@ get '/riding/:name' => sub {
         candidates      => $candidates,
         poll            => $poll,
         call            => $riding_calls,
+        ebc             => $votes,
+        ebc_lookup      => $ebc_lookup,
     );
     # Render the riding.html.ep template
     $self->render( 'riding' );
