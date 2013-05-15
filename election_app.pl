@@ -46,7 +46,7 @@ get '/riding/:name' => sub {
     my $riding_calls    = $cache->get( $name . '-calls' );
     my $poll            = $cache->get( 'poll' );
     my $votes           = $cache->get( $name . '-votes' );
-    my $ebc_lookup      = $cache->get( 'ebclookup' );
+    my $ebc_lookup      = $cache->get( 'ebclookup2' );
     # Stash the data 
     $self->stash(
         riding          => $riding,
