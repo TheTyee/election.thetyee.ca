@@ -17,7 +17,7 @@
     $(function() {
         // Leaflet map for top of page
         var map = L.map('map', { zoomControl: false });
-        L.tileLayer('http://{s}.tile.cloudmade.com/8df2e4e99eb94de2a136db10bf4e9afa/997/256/{z}/{x}/{y}.png', {
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         }).addTo(map);
 
         // Center on riding centroid
