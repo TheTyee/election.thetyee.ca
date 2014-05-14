@@ -63,7 +63,8 @@
                         })
                     });
       });
-    $('#winner div#image').append(myimage);
+      // TODO Upgrade to Twitter API v1.1
+      // $('#winner div#image').append(myimage);
     </script>
 % end
 
@@ -122,9 +123,10 @@
 <i class="icon-exclamation-sign"></i>&nbsp;<strong>Winner</strong> 
 <br />
 <script>
-    var winner_twitter = "<%= $winner->{'twitter'} %>";
-    myimage = new Image();
-    myimage.src = 'http://api.twitter.com/1/users/profile_image/' + winner_twitter + '/?size=bigger';
+    // TODO Upgrade to Twitter API v1.1
+    // var winner_twitter = "<%= $winner->{'twitter'} %>";
+    // myimage = new Image();
+    // myimage.src = 'http://api.twitter.com/1/users/profile_image/' + winner_twitter + '/?size=bigger';
 </script>
 <div id="image" style="float: left; margin-right: 10px;"></div>
 <%== $winner->{'url'} ? '<a href="' . $winner->{'url'} . '" ' . ' title="Web site for ' . $winner->{'fullname'} . '" >' . $winner->{'fullname'} . '</a>' : $winner->{'fullname'} %>&nbsp;<span class="label label-<%= $winner->{'partyslug'} %>" style="background-color: <%= $parties->{ $winner->{'partyslug'} }{'colour'} %>;"><%== $parties->{ $winner->{'partyslug'} }{'website'} ? '<a title="Party website" href="' . $parties->{ $winner->{'partyslug'} }{'website'} . '">' . $parties->{ $winner->{'partyslug'} }{'shortname'} . '</a>' : $parties->{ $winner->{'partyslug'} }{'shortname'} %></span>
@@ -183,7 +185,6 @@
                         <h3>Did you know?</h3>
                         <%== markdown( $riding->{'did-you-know'} ) %>
                     </div>
-                    <%== $poll %>
                     <div id="previous-results">
                         <h3>Previous Election Results</h3>
                         %# Did we have a by-election? If so, show the table
