@@ -219,5 +219,5 @@ sub _get_riding_call_stats {
 ########################################################################
 # For deployment with Morbo or Hypnotoad
 ########################################################################
-app->secret( $config->{'app_secret'} );
+app->secrets( $config->{'app_secret'} );
 app->start;
