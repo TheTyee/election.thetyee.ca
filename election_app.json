@@ -5,5 +5,5 @@
     "worksheet_name_parties"    : "Parties",
     "worksheet_name_candidates" : "Candidates",
     "avg_row_name"              : "Averages",
-    "static_asset_path"         : "http://static.apps.thetyee.ca/election/v2.0.0"
+    "static_asset_path"         : "http://static.apps.thetyee.ca/election/v2.0.1"
 }
