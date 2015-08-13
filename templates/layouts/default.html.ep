@@ -27,7 +27,6 @@
         <meta name="DC.format" content="text/html" />
 % if ( app->mode eq 'production' ) {
         <meta name="robots" content="index, follow" />
-        <%= include 'analytics' =%>
 % }
         <!-- Le styles -->
         <link href="<%= $asset %>/ui/css/styles.css" rel="stylesheet">
@@ -62,8 +61,8 @@
         GA_googleFetchAds();
         </script> 
     </head>
-
     <body id="<%= $body_class %>">
+        <%= include 'analytics' =%>
         <div class="container">
             <%= content %>
             <div id="riding-list" class="row-fluid">
