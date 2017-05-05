@@ -9,10 +9,10 @@
         <link rel="stylesheet" href="<%= $asset %>/ui/js/L.Control.Locate.css">
 % end
 % content_for javascript => begin
-        <script type="text/javascript" src="<%= $asset %>/ui/js/ridings-w-results-min.js"></script>
+        <script type="text/javascript" src="<%= $asset %>/ui/js/BCGW-zone7-2latlong.geojson-ridings.js"></script>
         <script src="<%= $asset %>/ui/js/L.Control.Locate.js"></script>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-        <script src="<%= $asset %>/ui/js/front-page-min.js"></script>
+        <script src="<%= $asset %>/ui/js/front-page.js"></script>
 % end
 % content_for footer_nav => begin
                 <ul class="nav nav-pills nav-stacked">

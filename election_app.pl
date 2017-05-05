@@ -17,7 +17,7 @@ my $cache = CHI->new(
     page_size  => '5026k',
 );
 
-# Route requests to /
+# Route requests to / 
 get '/' => sub {
     my $self = shift;
     my $hook_posts  = $cache->get( 'HookPostsNew' );
@@ -42,6 +42,9 @@ get '/riding/:name' => sub {
     my $parties         = $cache->get( 'Parties' );
     my $party_lookup    = $cache->get( 'PartyLookup' );
     my $candidates      = $cache->get( $name . '-candidates' );
+    use Data::Dumper;
+    app->log->debug("test");
+    app->log->debug("candidates \n" . Dumper($candidates) );
     my $candidate_names = _get_candidate_names( $candidates );
     my $riding_calls    = $cache->get( $name . '-calls' );
     my $poll            = $cache->get( 'poll' );
@@ -125,6 +128,7 @@ sub _get_tyee_story_urls {
 sub _get_candidate_names {
     my ( $candidates ) = @_;
     my @candidate_names;
+        if (!($candidates)) { return ''};
     my $can_names_str;
     for my $key ( sort keys $candidates ) {
         my $can = $candidates->{$key};
@@ -205,19 +209,19 @@ sub _get_riding_call_stats {
 ########################################################################
 # For development, or deployment with Plack
 ########################################################################
-#use Plack::Builder;
-#builder {
+ #use Plack::Builder;
+# builder {
 ## Only show the debug panel in development mode
-#my $mode = app->mode;
-#unless ( $mode eq 'production' ) {
-#enable 'Debug';
-#}
-#app->secret( $config->{'app_secret'} );
+# my $mode = app->mode;
+# unless ( $mode eq 'production' ) {
+# enable 'Debug';
+ #}
+# app->secret( $config->{'app_secret'} );
 #app->start;
-#};
+#  };
 
 ########################################################################
 # For deployment with Morbo or Hypnotoad
 ########################################################################
 app->secret( $config->{'app_secret'} );
-app->start;
+ app->start;

@@ -16,7 +16,8 @@ my $config = plugin 'JSONConfig' => { file => '../election_app.json' };
 my $ua = Mojo::UserAgent->new;
 
 use constant EBC_DATA_URI =>
-    'http://electionsbcenr.blob.core.windows.net/electionsbcenr/GE-2013-05-14_Candidate.csv';
+   'http://static.thetyee.ca/election/v2.0.1/ui/test/GE-2017-05-09_Candidate.csv';
+   # 'http://electionsbcenr.blob.core.windows.net/electionsbcenr/GE-2013-05-14_Candidate.csv';
 
 my $csv_data = $ua->get( EBC_DATA_URI )->res->body;
 

@@ -2,6 +2,8 @@
 use Modern::Perl '2013';
 use Mojolicious::Lite;
 use Net::Google::Spreadsheets;
+use Net::Google::DataAPI::Auth::OAuth2;
+use Storable;
 use JSON;
 use IO::All;
 use utf8::all;
@@ -19,13 +21,55 @@ my ($opt, $usage) = describe_options(
 print($usage->text), exit unless $opt->filename;
 print($usage->text), exit if $opt->help;
 
-my $config = plugin 'JSONConfig' => {file => '../election_app.production.json'};
+my $config = plugin 'JSONConfig' => {file => '../election_app.preview.json'};
 
 # Connect to Google Spreadsheets
-my $service = Net::Google::Spreadsheets->new(
-    username => $config->{'google_username'},
-    password => $config->{'google_password'},
+#my $service = Net::Google::Spreadsheets->new(
+#    username => $config->{'google_username'},
+ #   password => $config->{'google_password'},
+#);
+
+
+my $oauth2 = Net::Google::DataAPI::Auth::OAuth2->new(
+    client_id => $config->{'google_0auth_client'},
+    client_secret => $config->{'google_0auth_secret'},
+    scope => ['http://spreadsheets.google.com/feeds/'],
+    redirect_uri => 'https://thetyee.ca/oauth2callback',
+  );
+
+sub gettoken() {
+my $url = $oauth2->authorize_url();
+# you will need to put code here and receive token
+print "OAuth URL, get code: $url\n";
+use Term::Prompt;
+my $code = prompt('x', 'paste the code: ', '', ''); 
+
+
+
+my $token = $oauth2->get_access_token($code) or die;
+
+
+
+
+
+
+# save token for future use
+ my $session = $token->session_freeze;
+ store($session, 'google_spreadsheet.session');
+}
+
+gettoken();
+# RESTORE:
+my $session = retrieve('google_spreadsheet.session');
+my $restored_token = Net::OAuth2::AccessToken->session_thaw($session,
+    auto_refresh => 1,
+    profile => $oauth2->oauth2_webserver,
 );
+$oauth2->access_token($restored_token);
+
+my $service = Net::Google::Spreadsheets->new(auth => $oauth2);
+
+
 
 # Read the .json file into a data structure
 my $json = JSON->new->allow_nonref;
@@ -41,8 +85,8 @@ my $json_obj = {
 
 # Update the data structure with data from Google Spreadsheet
 for my $feature ( @$features ) {
-    say $feature->{'id'};
-    my $tyee_call   = _get_riding_from_gs( $feature->{'id'} );
+    say $feature->{'properties'}{'ED_ABBREVIATION'};
+    my $tyee_call   = _get_riding_from_gs( $feature->{'properties'}{'ED_ABBREVIATION'} );
     $feature->{'properties'}{'call'} = $tyee_call->{'call'};
     $feature->{'properties'}{'reason'} = $tyee_call->{'reasoning'};
     if ( $tyee_call->{'party'} ) {
@@ -66,8 +110,11 @@ sub _get_riding_from_gs {
     my ( $id ) = @_;
 
     # Find the spreadsheet by key
-    my $spreadsheet
-    = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
+#    my $spreadsheet
+#    = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
+# no do it by title becaues keys lookup are broken?
+my $spreadsheet = $service->spreadsheet( { title => '2017BC2013-Electoral-Ridings-Master-22-Jan-2012' } );
+
 
     # Find the main worksheet by title
     my $worksheet = $spreadsheet->worksheet(
@@ -83,9 +130,13 @@ sub _get_party_from_gs {
     my ( $name ) = @_;
 
     # Find the spreadsheet by key
-    my $spreadsheet
-    = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
+   # my $spreadsheet
+   # = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
+# no do it by title becaues key are broken?
+my $spreadsheet = $service->spreadsheet( { title => '2017BC2013-Electoral-Ridings-Master-22-Jan-2012' } );
 
+   
+   
     # Find the main worksheet by title
     my $worksheet = $spreadsheet->worksheet(
         { title => 'Parties', } );
@@ -100,9 +151,14 @@ sub _get_candidate_from_gs {
     my ( $name, $party ) = @_;
 
     # Find the spreadsheet by key
-    my $spreadsheet
-    = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
+    #my $spreadsheet
+    #= $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
 
+    # no do it by title becaues key are broken?
+my $spreadsheet = $service->spreadsheet( { title => '2017BC2013-Electoral-Ridings-Master-22-Jan-2012' } );
+
+   
+    
     # Find the main worksheet by title
     my $worksheet = $spreadsheet->worksheet(
         { title => 'Candidates', } );

@@ -3,6 +3,8 @@ use Mojolicious::Lite;
 use Mojo::UserAgent;
 use Mojo::JSON;
 use Modern::Perl '2013';
+use Net::Google::DataAPI::Auth::OAuth2;
+use Storable;
 use Net::Google::Spreadsheets;
 use utf8::all;
 use CHI;
@@ -22,7 +24,7 @@ my ( $opt, $usage ) = describe_options(
 print( $usage->text ), exit unless $opt->frequency;
 print( $usage->text ), exit if $opt->help;
 
-my $config = plugin 'JSONConfig' => { file => '../election_app.json' };
+my $config = plugin 'JSONConfig' => { file => '../election_app.preview.json' };
 
 # UserAgent
 my $ua = Mojo::UserAgent->new;
@@ -37,22 +39,98 @@ my $cache = CHI->new(
 use constant REPRESENT_API => 'http://represent.opennorth.ca';
 use constant TYEE_API      => 'http://api.thetyee.ca/v1/';
 use constant EBC_DATA_URI =>
-    'http://electionsbcenr.blob.core.windows.net/electionsbcenr/GE-2013-05-14_Candidate.csv';
+   'http://static.thetyee.ca/election/v2.0.1/ui/test/GE-2017-05-09_Candidate.csv';
+
+  #  'http://electionsbcenr.blob.core.windows.net/electionsbcenr/GE-2013-05-14_Candidate.csv';
+
+my $oauth2 = Net::Google::DataAPI::Auth::OAuth2->new(
+    client_id => $config->{'google_0auth_client'},
+    client_secret => $config->{'google_0auth_secret'},
+    scope => ['http://spreadsheets.google.com/feeds/'],
+    redirect_uri => 'https://thetyee.ca/oauth2callback',
+  );
+
+sub gettoken() {
+my $url = $oauth2->authorize_url();
+# you will need to put code here and receive token
+print "OAuth URL, get code: $url\n";
+use Term::Prompt;
+my $code = prompt('x', 'paste the code: ', '', ''); 
+
+
+
+my $token = $oauth2->get_access_token($code) or die;
+
+
+
+
+
+
+# save token for future use
+ my $session = $token->session_freeze;
+ store($session, 'google_spreadsheet.session');
+}
+
+# gettoken();
+# RESTORE:
+my $session = retrieve('google_spreadsheet.session');
+my $restored_token = Net::OAuth2::AccessToken->session_thaw($session,
+    auto_refresh => 1,
+    profile => $oauth2->oauth2_webserver,
+);
+$oauth2->access_token($restored_token);
+
+my $service = Net::Google::Spreadsheets->new(auth => $oauth2);
+
 
 # Connect to Google Spreadsheets on app startup
-my $service = Net::Google::Spreadsheets->new(
-    username => $config->{'google_username'},
-    password => $config->{'google_password'},
-);
+#my $service = Net::Google::Spreadsheets->new(
+#    username => $config->{'google_username'},
+#    password => $config->{'google_password'},
+# );
 
 # Find the spreadsheet by key
-my $spreadsheet
-    = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
+#my $spreadsheet   = $service->spreadsheet( { key => $config->{'spreadsheet_key'}, } );
+
+#my $spreadsheet = $service->spreadsheet(
+ #   {
+ #       key => '19GG-BjrZKeNTe3toRYnrtxpg_cY0VupcNtu4ryOS35k'
+ #   }
+ # );
+
+my $spreadsheet = $service->spreadsheet( { title => '2017BC2013-Electoral-Ridings-Master-22-Jan-2012' } );
+
+# app->log->debug("spreadsheet: " . Dumper($spreadsheet));
+
+
+my %spreadsheets = $service->spreadsheets();
+
+
+my $list;
+
+foreach my $item (keys %spreadsheets){
+  $list .= "$item: ";
+  foreach my $iteminitem (keys %{$spreadsheets{$item}}){
+    $list .= "$iteminitem : $spreadsheets{$item}{$iteminitem} ";
+        
+    
+  }
+ $list .= "\n";
+}
+
+
+# app->log->debug(Dumper($list));
+
+
+# app->log->debug(Dumper($spreadsheet));
 
 main();
 
 sub main {
     given ( $opt->frequency ) {
+        when ( /test/ ) {
+            _cache_write_ridings();
+        }
         when ( /minutes/ ) {
             _cache_write_ebc();
             _cache_write_ebc_lookup();
@@ -122,18 +200,32 @@ sub _cache_write_averages {
 }
 
 sub _cache_write_representative {
+    
     my $name = shift;
+    
+    print "name: $name \n";
     my $rep_query
         = '/boundaries/british-columbia-electoral-districts/'
         . $name
         . '/representatives/';
     my $rep_data = $ua->get( REPRESENT_API . $rep_query )->res->json;
     $rep_data = $rep_data->{'objects'}[0];
-
+    if ($rep_data) {
     if ( $rep_data->{'party_name'} eq 'New Democratic Party of BC' ) {
         $rep_data->{'party_name'} = 'BC New Democratic Party';
     }
     $cache->set( $name . '-incumbent', $rep_data, "never" );
+    } else {
+         $cache->set( $name . '-incumbent',  "never" );
+          use Data::Dumper;
+    
+       print "cache name incumbent is  " . Dumper( $cache->get( $name . '-incumbent' ));
+       print "cache name is  " . Dumper( $cache->get( $name ));
+
+        
+    }
+   
+
 }
 
 sub _cache_write_parties {
@@ -195,6 +287,8 @@ sub _cache_write_candidates_by_riding {
         $candidates->{$slug} = $candidate->content;
     }
     $cache->set( $name . '-candidates', $candidates, "never" );
+    print "$name candidates";
+    print Dumper($candidates);
     print Dumper( $cache->get( $name . '-candidates' ) ) if $opt->verbose;
 }
 
